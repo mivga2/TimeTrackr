@@ -1,0 +1,21 @@
+$dark-green: rgb(9, 69, 50);
+$silver: #dcced5;
+
+$base-color: $dark-green;
+$accent-color: $silver;
+
+body,
+html {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Height of the footer */
+  background: $base-color;
+  color: $accent-color;
+}
