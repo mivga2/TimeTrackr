@@ -1,7 +1,9 @@
 $dark-green: rgb(9, 69, 50);
-$silver: #dcced5;
+$gray: #98858e;
+$silver: #f3eaee;
 
 $base-color: $dark-green;
+$focus-color: $gray;
 $accent-color: $silver;
 
 body,
@@ -9,6 +11,51 @@ html {
   padding: 0px;
   margin: 0px;
   border: 0px;
+  background-color: $accent-color;
+}
+
+nav {
+  padding: 10px 0px;
+  margin: 0px;
+  border: 0px;
+  background-color: $base-color;
+  display: block;
+  width: 100%;
+
+  li {
+    padding: 0px 20px;
+    margin: 0px;
+    border: 0px;
+    list-style-type: none;
+    text-decoration: none;
+    color: $accent-color;
+    display: inline-block;
+  
+    :visited, :link {
+      color: $accent-color;
+      text-decoration: none;
+    }
+
+    :active, :hover {
+      color: $focus-color;
+    }
+    
+  }
+}
+
+.router-view {
+  margin: 10px;
+  padding: 0px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  td {
+    border: 1px solid;
+    padding: 2px 5px;
+  }
 }
 
 footer {

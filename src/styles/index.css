@@ -3,6 +3,46 @@ html {
   padding: 0px;
   margin: 0px;
   border: 0px;
+  background-color: #f3eaee;
+}
+
+nav {
+  padding: 10px 0px;
+  margin: 0px;
+  border: 0px;
+  background-color: rgb(9, 69, 50);
+  display: block;
+  width: 100%;
+}
+nav li {
+  padding: 0px 20px;
+  margin: 0px;
+  border: 0px;
+  list-style-type: none;
+  text-decoration: none;
+  color: #f3eaee;
+  display: inline-block;
+}
+nav li :visited, nav li :link {
+  color: #f3eaee;
+  text-decoration: none;
+}
+nav li :active, nav li :hover {
+  color: #98858e;
+}
+
+.router-view {
+  margin: 10px;
+  padding: 0px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table td {
+  border: 1px solid;
+  padding: 2px 5px;
 }
 
 footer {
@@ -11,5 +51,5 @@ footer {
   width: 100%;
   height: 60px; /* Height of the footer */
   background: rgb(9, 69, 50);
-  color: #dcced5;
+  color: #f3eaee;
 }/*# sourceMappingURL=index.css.map */

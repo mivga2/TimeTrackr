@@ -6,7 +6,9 @@ const Base = () => {
   return (
     <>
       <Navigation />
-      <Outlet />
+      <div className="router-view">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );
