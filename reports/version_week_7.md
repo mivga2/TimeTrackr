@@ -33,5 +33,6 @@ Pridané technológie "pg", "dotenv", "cors" na prepojenie databázy a Node.js, 
 "cors": "^2.8.5"
 "axios": "^1.6.8"
 
+Iné pomenovania tabuliek a stĺpcov v databáze:
 Mená tabuliek v databáze sú v pluráli
 V databáze sú premenované stĺpce typu {atr}_date na date_{atr}
