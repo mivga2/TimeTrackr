@@ -11,3 +11,20 @@ export const fetchAll = async (apiUrl: string) => {
 
   return response;
 };
+
+export const postNew = async (apiUrl: string, data: any) => {
+  const apiEndpoint = `${apiUrlBase}${apiUrl}`;
+
+  await axios
+    .post(apiEndpoint, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};

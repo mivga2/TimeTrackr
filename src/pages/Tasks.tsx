@@ -31,7 +31,7 @@ const Tasks = () => {
 
   return (
     <>
-      <NewTask displayNewTaskForm={false} />
+      <NewTask displayNewTaskForm={true} />
       <Table
         title="Tasks list"
         columnMapping={columns}
