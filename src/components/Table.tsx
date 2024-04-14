@@ -1,16 +1,30 @@
 type TableProps = {
   title: string;
-  columns: Array<string>;
-  data: Array<Array<string>>;
+  columnMapping: any;
+  headers: any;
+  data: any;
 };
 
-const Table = ({ title, columns, data }: TableProps) => {
-  const columnTitles = columns.map((column) => <th>{column}</th>);
+const Table = ({ title, columnMapping, headers, data }: TableProps) => {
+  {
+    /* generate table heads from columnMapping and headers props */
+  }
+  const columnTitles = columnMapping.map((item, i) => (
+    <th key={i}>{headers[item]}</th>
+  ));
 
-  const columnEntries = data.map((entry) => {
-    const row = entry.map((item) => <td>{item}</td>);
-    return <tr> {row} </tr>;
-  });
+  let columnEntries = "";
+  {
+    /* generate table rows from columnMapping and data props */
+  }
+  if (data) {
+    columnEntries = data.map((entry, i1) => {
+      const row = columnMapping.map((item, i2) => (
+        <td key={i2}>{entry[item]}</td>
+      ));
+      return <tr key={i1}>{row}</tr>;
+    });
+  }
 
   return (
     <div>
@@ -19,10 +33,10 @@ const Table = ({ title, columns, data }: TableProps) => {
       <hr />
 
       <table>
-        {/* generate table heads from columns prop */}
-        <tr>{columnTitles}</tr>
-        {/* generate data for rows, each row one item */}
-        {columnEntries}
+        <thead>
+          <tr>{columnTitles}</tr>
+        </thead>
+        <tbody>{columnEntries}</tbody>
       </table>
     </div>
   );

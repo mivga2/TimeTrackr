@@ -23,17 +23,29 @@ nav li {
   color: #f3eaee;
   display: inline-block;
 }
-nav li :visited, nav li :link {
+nav li :visited,
+nav li :link {
   color: #f3eaee;
   text-decoration: none;
 }
-nav li :active, nav li :hover {
+nav li :active,
+nav li :hover {
   color: #98858e;
 }
 
 .router-view {
   margin: 10px;
   padding: 0px;
+}
+
+input:active {
+  border: none;
+}
+
+.item-name-input {
+  border: none;
+  font-weight: bold;
+  font-size: large;
 }
 
 table {
