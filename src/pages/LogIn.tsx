@@ -6,7 +6,6 @@ const LogIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [auth, setAuth] = useState({ id: null });
-  const id = localStorage["userId"];
 
   const navigate = useNavigate();
 
