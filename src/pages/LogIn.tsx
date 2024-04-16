@@ -33,7 +33,7 @@ const LogIn = () => {
   };
 
   useEffect(() => {
-    if (auth) {
+    if (auth.id) {
       localStorage["userId"] = auth.id;
       cleanUp();
       navigate("/account");
