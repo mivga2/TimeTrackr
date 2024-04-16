@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { useState } from 'react';
-const apiUrlBase = "http://localhost:3000";
+const apiUrlBase = "https://timetrackrserver.onrender.com/";
 
 export const fetchAll = async (apiUrl: string) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
