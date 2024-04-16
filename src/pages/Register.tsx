@@ -18,7 +18,7 @@ const Register = () => {
     disabled: false,
   };
 
-  const createUser = async (e) => {
+  const createUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
     userData.id = uuidv4();

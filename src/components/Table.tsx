@@ -1,3 +1,5 @@
+import { Data } from "../interfaces/Data";
+
 type TableProps = {
   title: string;
   columnMapping: any;
@@ -9,7 +11,7 @@ const Table = ({ title, columnMapping, headers, data }: TableProps) => {
   {
     /* generate table heads from columnMapping and headers props */
   }
-  const columnTitles = columnMapping.map((item, i) => (
+  const columnTitles = columnMapping.map((item: string, i: number) => (
     <th key={i}>{headers[item]}</th>
   ));
 
@@ -18,8 +20,9 @@ const Table = ({ title, columnMapping, headers, data }: TableProps) => {
     /* generate table rows from columnMapping and data props */
   }
   if (data) {
-    columnEntries = data.map((entry, i1) => {
-      const row = columnMapping.map((item, i2) => (
+    console.log(data[0]);
+    columnEntries = data.map((entry: Data, i1: number) => {
+      const row = columnMapping.map((item: keyof Data, i2: number) => (
         <td key={i2}>{entry[item]}</td>
       ));
       return <tr key={i1}>{row}</tr>;

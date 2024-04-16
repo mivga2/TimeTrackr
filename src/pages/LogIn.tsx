@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const LogIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useState(null);
+  const [auth, setAuth] = useState({ id: null });
   const id = localStorage["userId"];
 
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const LogIn = () => {
     if (id) navigate("/overview");
   }, [id, navigate]);
 
-  const authenticateUser = async (e) => {
+  const authenticateUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
     await getUserAuthenticate(
@@ -41,7 +41,7 @@ const LogIn = () => {
   }, [auth, navigate]);
 
   const cleanUp = () => {
-    setAuth(null);
+    setAuth({ id: null });
     setUsername("");
     setPassword("");
   };

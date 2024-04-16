@@ -1,5 +1,5 @@
 export interface Task {
-  calendar_id: string | null;
+  calendar_id: string;
   color: string;
   completion_rate_id: string;
   custom_repetition_dates: Array<string> | null;

@@ -13,7 +13,7 @@ const NewTask = ({ displayNewTaskForm }: NewTaskProps) => {
   const [calendar, setCalendar] = useState(
     "26d44e0c-1963-4833-9fcc-258fcc59e028"
   );
-  const [event, setEvent] = useState(null);
+  const [event, setEvent] = useState("e3195053-df09-4bfe-ae43-37fe0803d416");
   const [color, setColor] = useState("#FFFFFF");
   const [visible, setVisible] = useState(false);
 
@@ -23,12 +23,13 @@ const NewTask = ({ displayNewTaskForm }: NewTaskProps) => {
     date_due: dateDue,
     description: description,
     event_id: event,
-    id: null,
+    id: "",
+    completion_rate_id: "",
     name: name,
     visible: visible,
   };
 
-  const createTask = (e) => {
+  const createTask = (e: React.FormEvent) => {
     e.preventDefault();
     taskData.id = uuidv4();
     taskData.completion_rate_id = "471cae22-4db1-4986-ac88-a077df96aab0";
@@ -95,8 +96,11 @@ const NewTask = ({ displayNewTaskForm }: NewTaskProps) => {
           <div>
             <label>
               Visible in calendar:
-              <input type="checkbox" checked={visible}
-                onChange={(e) => setVisible(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={visible}
+                onChange={(e) => setVisible(e.target.checked)}
+              />
             </label>
           </div>
           <div>

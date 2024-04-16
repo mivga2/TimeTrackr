@@ -20,6 +20,7 @@ app.use(
 );
 
 export const pool = new Pool({
+  // eslint-disable-next-line no-undef
   connectionString: process.env.DBConnLink,
   ssl: {
     rejectUnauthorized: false,

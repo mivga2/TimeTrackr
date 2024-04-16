@@ -13,7 +13,6 @@ const Account = () => {
     });
   }, [id]);
 
-  const getUser = () => {};
   console.log(user);
 
   const userData = {
@@ -35,7 +34,6 @@ const Account = () => {
     <div>
       {/* <Table title="Friends list" columns={columns} data={data} /> */}
       {userData.username}
-      <button onClick={getUser}>click</button>
 
       <button onClick={logOut}>Log Out</button>
       <button onClick={deleteAccount}>DELETE</button>
