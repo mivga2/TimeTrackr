@@ -19,8 +19,8 @@ const LogIn = () => {
     // console.log("id", id)
     // console.log("loc sto", localStorage['userId'])
     // console.log("auth", auth)
-    if (id) navigate("/overview");
-  }, [id, navigate]);
+    if (auth.id) navigate("/overview");
+  }, [auth, navigate]);
 
   const authenticateUser = async (e: React.FormEvent) => {
     e.preventDefault();
