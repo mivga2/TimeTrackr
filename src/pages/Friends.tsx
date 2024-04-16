@@ -11,7 +11,7 @@ const Friends = () => {
   ];
   return (
     <div>
-      <Table title="Friends list" columns={columns} data={data} />
+      {/* <Table title="Friends list" columns={columns} data={data} /> */}
     </div>
   );
 };

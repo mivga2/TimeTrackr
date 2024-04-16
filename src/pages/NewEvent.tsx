@@ -28,8 +28,8 @@ const NewEvent = ({ displayNewEventForm }: NewEventProps) => {
     name: name,
   };
 
-  const createEvent = (event) => {
-    event.preventDefault();
+  const createEvent = (e) => {
+    e.preventDefault();
     eventData.id = uuidv4();
 
     console.log("FORM DATA", eventData);
