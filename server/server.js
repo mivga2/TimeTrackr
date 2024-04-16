@@ -48,13 +48,21 @@ app.get("/", (req, res) => {
   res.send("Hello from our server!");
 });
 
-// app.get('/users', getUsers)
-
+// get list of all items
 app.get("/api/v1/events", q.getAllEvents);
 app.get("/api/v1/tasks", q.getAllTasks);
 
+// get item by id
+app.get("/api/v1/user/:id", q.getUserById);
+app.get("/api/v1/user/:username/:password", q.getUserByName);
+
+// create new item
 app.post("/api/v1/event", q.postEvent);
 app.post("/api/v1/task", q.postTask);
+app.post("/api/v1/user", q.postUser);
+
+// delete item by id
+app.delete("/api/v1/user/:id", q.deleteUserById);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

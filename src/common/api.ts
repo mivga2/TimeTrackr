@@ -12,6 +12,26 @@ export const fetchAll = async (apiUrl: string) => {
   return response;
 };
 
+export const fetchOne = async (apiUrl: string) => {
+  const apiEndpoint = `${apiUrlBase}${apiUrl}`;
+
+  const response = await axios.get(apiEndpoint).catch((error) => {
+    console.error("Couldn't load data.", error);
+  });
+
+  return response;
+};
+
+export const getUserAuthenticate = async (apiUrl: string) => {
+  const apiEndpoint = `${apiUrlBase}${apiUrl}`;
+
+  const response = await axios.get(apiEndpoint).catch((error) => {
+    console.error("Couldn't load data.", error);
+  });
+
+  return response;
+};
+
 export const postNew = async (apiUrl: string, data: any) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
 
@@ -27,4 +47,12 @@ export const postNew = async (apiUrl: string, data: any) => {
     .catch(function (error) {
       console.log(error);
     });
+};
+
+export const deleteOne = async (apiUrl: string) => {
+  const apiEndpoint = `${apiUrlBase}${apiUrl}`;
+
+  await axios.delete(apiEndpoint).catch((error) => {
+    console.error("Couldn't load data.", error);
+  });
 };
