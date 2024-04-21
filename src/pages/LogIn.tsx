@@ -14,7 +14,7 @@ export const setActiveUserId = function(name : string) {
 const LogIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useState({ id: null });
+  const [auth, setAuth] = useState({ id: '' });
 
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ const LogIn = () => {
   }, [auth, navigate]);
 
   const cleanUp = () => {
-    setAuth({ id: null });
+    setAuth({ id: '' });
     setUsername("");
     setPassword("");
   };
