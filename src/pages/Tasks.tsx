@@ -1,16 +1,17 @@
 import Table from "../components/Table";
-import NewTask from "./NewTask";
 import { fetchAll } from "../common/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Tasks = () => {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState(null);
 
   useEffect(() => {
     fetchAll("/api/v1/tasks").then((result) => {
       setTasks(result?.data);
     });
-  }, []);
+  }, [tasks]);
 
   console.log(tasks);
   const columns = [
@@ -19,6 +20,7 @@ const Tasks = () => {
     "date_due",
     "event_id",
     "calendar_id",
+    "id",
   ];
 
   const headers = {
@@ -27,16 +29,22 @@ const Tasks = () => {
     date_due: "Due Date",
     event_id: "Associated event",
     calendar_id: "Associated Calendar",
+    id: "Edit or delete task",
+  };
+
+  const newTask = () => {
+    navigate("/tasks/new");
   };
 
   return (
     <>
-      <NewTask displayNewTaskForm={true} />
+      <button onClick={newTask}>Create new task</button>
       <Table
         title="Tasks list"
         columnMapping={columns}
         headers={headers}
         data={tasks}
+        itemType="tasks"
       />
     </>
   );

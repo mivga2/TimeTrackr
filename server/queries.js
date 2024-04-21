@@ -39,18 +39,55 @@ export const postEvent = async (request, response) => {
   });
 };
 
-// export const getEventById = async (request, response) => {
-//   const res = await pool.query(
-//     'SELECT * FROM public."Events"',
-//     (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       response.status(200).json(results.rows);
-//       console.log(res);
-//     }
-//   );
-// };
+export const getEventById = async (request, response) => {
+  const sql = 'SELECT * FROM public."Events" WHERE id = $1';
+  const values = [request.params.id];
+
+  const res = await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+    console.log(res);
+  });
+};
+
+export const putEventById = async (request, response) => {
+  const sql = 'UPDATE public."Events" SET calendar_id = $1, name = $2, description = $3, date_from = $4, date_to = $5, repetition_type_id = $6, custom_repetition_dates = $7, location = $8, event_category_id = $9, color = $10 WHERE id = $11';
+
+  const values = [
+    request.body.calendar_id,
+    request.body.name,
+    request.body.description,
+    request.body.date_from,
+    request.body.date_to,
+    request.body.repetition_type_id,
+    request.body.custom_repetition_dates,
+    request.body.location,
+    request.body.event_category_id,
+    request.body.color,
+    request.body.id,
+  ];
+
+  await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
+
+export const deleteEventById = async (request, response) => {
+  const sql = 'DELETE FROM public."Events" WHERE id = $1;';
+  const values = [request.params.id];
+
+  await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
 
 // task queries
 export const getAllTasks = async (request, response) => {
@@ -83,6 +120,58 @@ export const postTask = async (request, response) => {
     request.body.task_category_id,
     request.body.event_id,
   ];
+
+  await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
+
+export const getTaskById = async (request, response) => {
+  const sql = 'SELECT * FROM public."Tasks" WHERE id = $1';
+  const values = [request.params.id];
+
+  const res = await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+    console.log(res);
+  });
+};
+
+
+export const putTaskById = async (request, response) => {
+  const sql = 'UPDATE public."Tasks" SET calendar_id = $1, name = $2, color = $3, visible = $4, description = $5, date_due = $6, repetition_type_id = $7, custom_repetition_dates = $8, completion_rate_id = $9, task_category_id = $10, event_id = $11 WHERE id = $12';
+
+  const values = [
+    request.body.calendar_id,
+    request.body.name,
+    request.body.color,
+    request.body.visible,
+    request.body.description,
+    request.body.date_due,
+    request.body.repetition_type_id,
+    request.body.custom_repetition_dates,
+    request.body.completion_rate_id,
+    request.body.task_category_id,
+    request.body.event_id,
+    request.body.id,
+  ];
+
+  await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
+
+export const deleteTaskById = async (request, response) => {
+  const sql = 'DELETE FROM public."Tasks" WHERE id = $1;';
+  const values = [request.params.id];
 
   await pool.query(sql, values, (error, results) => {
     if (error) {

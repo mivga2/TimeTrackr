@@ -5,9 +5,16 @@ type TableProps = {
   columnMapping: any;
   headers: any;
   data: any;
+  itemType: string;
 };
 
-const Table = ({ title, columnMapping, headers, data }: TableProps) => {
+const Table = ({
+  title,
+  columnMapping,
+  headers,
+  data,
+  itemType,
+}: TableProps) => {
   {
     /* generate table heads from columnMapping and headers props */
   }
@@ -22,9 +29,15 @@ const Table = ({ title, columnMapping, headers, data }: TableProps) => {
   if (data) {
     console.log(data[0]);
     columnEntries = data.map((entry: Data, i1: number) => {
-      const row = columnMapping.map((item: keyof Data, i2: number) => (
-        <td key={i2}>{entry[item]}</td>
-      ));
+      const row = columnMapping.map((item: keyof Data, i2: number) =>
+        item == "id" ? (
+          <td key={i2}>
+            <a href={"/" + itemType + "/edit/" + entry[item]}>edit</a> | <a href={"/" + itemType + "/delete/" + entry[item]}>delete</a>
+          </td>
+        ) : (
+          <td key={i2}>{entry[item]}</td>
+        )
+      );
       return <tr key={i1}>{row}</tr>;
     });
   }

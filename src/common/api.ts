@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { useState } from 'react';
-const apiUrlBase = "https://timetrackrserver.onrender.com/";
+const apiUrlBase = "https://timetrackrserver.onrender.com";
 
 export const fetchAll = async (apiUrl: string) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
@@ -14,7 +14,6 @@ export const fetchAll = async (apiUrl: string) => {
 
 export const fetchOne = async (apiUrl: string) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
-
   const response = await axios.get(apiEndpoint).catch((error) => {
     console.error("Couldn't load data.", error);
   });
@@ -55,4 +54,21 @@ export const deleteOne = async (apiUrl: string) => {
   await axios.delete(apiEndpoint).catch((error) => {
     console.error("Couldn't load data.", error);
   });
+};
+
+export const updateOne = async (apiUrl: string, data: any) => {
+  const apiEndpoint = `${apiUrlBase}${apiUrl}`;
+
+  await axios
+    .put(apiEndpoint, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };

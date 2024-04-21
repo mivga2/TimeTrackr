@@ -1,21 +1,47 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { postNew } from "../common/api";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchOne, updateOne } from "../common/api";
 
-const NewTask = () => {
+const EditTask = () => {
   const navigate = useNavigate();
   const cancelRoute = "/tasks";
+  const { id } = useParams();
+
+  const [task, setTask] = useState({
+    name: null,
+    description: null,
+    date_due: "",
+    location: null,
+    calendar_id: null,
+    event: null,
+    color: null,
+    visible: null,
+  });
+
+  useEffect(() => {
+    fetchOne(`/api/v1/task/${id}`).then((result) => {
+      setTask(result?.data[0]);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    setName(task.name || "");
+    setDescription(task.description ? task.description : "");
+    setDateDue(task.date_due ? task.date_due.slice(0, 16) : "");
+    setLocation(task.location || "");
+    setCalendar(task.calendar_id || "");
+    setEvent(task.event || "");
+    setColor(task.color || "");
+    setVisible(task.visible || false);
+  }, [task]);
 
   const [name, setName] = useState("New Task");
   const [description, setDescription] = useState("");
   const [dateDue, setDateDue] = useState(new Date().toISOString().slice(0, 16));
   const [location, setLocation] = useState("");
-  const [calendar, setCalendar] = useState(
-    "26d44e0c-1963-4833-9fcc-258fcc59e028"
-  );
-  const [event, setEvent] = useState("e3195053-df09-4bfe-ae43-37fe0803d416");
-  const [color, setColor] = useState("#FFFFFF");
+  const [calendar, setCalendar] = useState("");
+  const [event, setEvent] = useState("");
+  const [color, setColor] = useState("");
   const [visible, setVisible] = useState(false);
 
   const taskData = {
@@ -24,18 +50,17 @@ const NewTask = () => {
     date_due: dateDue,
     description: description,
     event_id: event,
-    id: "",
-    completion_rate_id: "",
+    id: id,
+    completion_rate_id: "471cae22-4db1-4986-ac88-a077df96aab0",
     name: name,
     visible: visible,
   };
 
-  const createTask = (e: React.FormEvent) => {
+  const updateTask = (e: React.FormEvent) => {
     e.preventDefault();
-    taskData.id = uuidv4();
-    taskData.completion_rate_id = "471cae22-4db1-4986-ac88-a077df96aab0";
+    taskData.event_id = "5012bda6-340b-4d9e-8ffa-880f1d78fca2";
 
-    postNew("/api/v1/task", taskData);
+    updateOne(`/api/v1/task/${id}`, taskData);
     navigate(cancelRoute);
   };
 
@@ -45,7 +70,7 @@ const NewTask = () => {
 
   return (
     <div>
-      <form onSubmit={createTask}>
+      <form onSubmit={updateTask}>
         <div>
           <input
             type="text"
@@ -65,7 +90,7 @@ const NewTask = () => {
         </div>
         <div>
           <label>
-            Due date:
+            Date from:
             <input
               type="datetime-local"
               value={dateDue}
@@ -129,11 +154,11 @@ const NewTask = () => {
           </label>
         </div>
 
-        <input type="submit" value="Create" />
+        <input type="submit" value="Update" />
         <input type="button" value="Cancel" onClick={cancel} />
       </form>
     </div>
   );
 };
 
-export default NewTask;
+export default EditTask;

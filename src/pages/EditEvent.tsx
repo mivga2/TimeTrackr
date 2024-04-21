@@ -1,11 +1,37 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { postNew } from "../common/api";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchOne, updateOne } from "../common/api";
 
-const NewEvent = () => {
+const EditEvent = () => {
   const navigate = useNavigate();
   const cancelRoute = "/events";
+  const { id } = useParams();
+
+  const [event, setEvent] = useState({
+    name: null,
+    description: null,
+    date_from: '',
+    date_to: '',
+    location: null,
+    calendar_id: null,
+    color: null,
+  });
+
+  useEffect(() => {
+    fetchOne(`/api/v1/event/${id}`).then((result) => {
+      setEvent(result?.data[0]);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    setName(event.name || '');
+    setDescription(event.description ? event.description : "");
+    setDateFrom(event.date_from ? event.date_from.slice(0, 16) : "");
+    setDateTo(event.date_to ? event.date_to.slice(0, 16) : "");
+    setLocation(event.location || '');
+    setCalendar(event.calendar_id || '');
+    setColor(event.color || '');
+  }, [event]);
 
   const [name, setName] = useState("New Event");
   const [description, setDescription] = useState("");
@@ -14,9 +40,7 @@ const NewEvent = () => {
   );
   const [dateTo, setDateTo] = useState(new Date().toISOString().slice(0, 16));
   const [location, setLocation] = useState("");
-  const [calendar, setCalendar] = useState(
-    "26d44e0c-1963-4833-9fcc-258fcc59e028"
-  );
+  const [calendar, setCalendar] = useState("");
   const [color, setColor] = useState("#FFFFFF");
 
   const eventData = {
@@ -25,16 +49,15 @@ const NewEvent = () => {
     date_from: dateFrom,
     date_to: dateTo,
     description: description,
-    id: "",
+    id: id,
     location: location,
     name: name,
   };
 
-  const createEvent = (e: React.FormEvent) => {
+  const updateEvent = (e: React.FormEvent) => {
     e.preventDefault();
-    eventData.id = uuidv4();
 
-    postNew("/api/v1/event", eventData);
+    updateOne(`/api/v1/event/${id}`, eventData);
     navigate(cancelRoute);
   };
 
@@ -44,7 +67,7 @@ const NewEvent = () => {
 
   return (
     <div>
-      <form onSubmit={createEvent}>
+      <form onSubmit={updateEvent}>
         <div>
           <input
             type="text"
@@ -116,11 +139,11 @@ const NewEvent = () => {
           </label>
         </div>
 
-        <input type="submit" value="Create" />
+        <input type="submit" value="Update" />
         <input type="button" value="Cancel" onClick={cancel} />
       </form>
     </div>
   );
 };
 
-export default NewEvent;
+export default EditEvent;

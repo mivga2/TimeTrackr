@@ -56,14 +56,22 @@ app.get("/api/v1/tasks", q.getAllTasks);
 // get item by id
 app.get("/api/v1/user/:id", q.getUserById);
 app.get("/api/v1/user/:username/:password", q.getUserByName);
+app.get("/api/v1/event/:id", q.getEventById);
+app.get("/api/v1/task/:id", q.getTaskById);
 
 // create new item
 app.post("/api/v1/event", q.postEvent);
 app.post("/api/v1/task", q.postTask);
 app.post("/api/v1/user", q.postUser);
 
+// update item by id
+app.put("/api/v1/event/:id", q.putEventById);
+app.put("/api/v1/task/:id", q.putTaskById);
+
 // delete item by id
 app.delete("/api/v1/user/:id", q.deleteUserById);
+app.delete("/api/v1/event/:id", q.deleteEventById);
+app.delete("/api/v1/task/:id", q.deleteTaskById);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
