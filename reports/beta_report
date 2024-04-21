@@ -1,0 +1,41 @@
+Michelle Gavlák
+beta_version
+
+
+TimeTrackr
+
+https://github.com/mivga2/TimeTrackr
+Tag: beta_version
+
+https://timetrackr.onrender.com
+
+Stačí navštíviť stránku. Je to prepojené cez github, tak na render.com stačí spustiť deploy.
+
+implementované
+zobrazovanie úloh a udalostí
+vytváranie úloh a udalostí
+úprava a mazanie udalostí a úloh
+
+rozpracované:
+zobrazenie v kalendári
+prihlasovanie
+
+vôbec:
+zdieľané položky
+kategórie udalostí a úloh
+
+
+Plán na najblizšie obdobie:
+28.4. Opraviť editovanie a mazanie úloh a udalostí na hostingu
+28.4. Opraviť prihlasovanie a vytváranie užívateľov na hostingu
+28.4. Pridať zdieľanie položiek
+5.5. Kalendár doriešiť
+5.5. Bezpečnosť stránky vyriešiť a skontrolovať
+12.5. Dizajn
+12.5. Extra funkcionalita, spojazdnenie na hostingu
+
+
+Problémy:
+reaktivita premenných a ich asynchronnosť, kedy sú dostupne aké hodnoty
+hooks, kedy sa čo vykoná
+rozdielné správanie na localhoste a hostingu
