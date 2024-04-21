@@ -24,7 +24,7 @@ const Routing = () => {
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Base />}>
-            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/" element={<Navigate to="/overview" />} />
             <Route path="/overview" element={<Overview />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/events" element={<Events />} />
@@ -38,10 +38,10 @@ const Routing = () => {
             <Route path="/friends" element={<Friends />} />
             <Route path="/shared" element={<Shared />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/login" element={<LogIn />} />
+            <Route path="/account" element={<Account />} />  
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="/login" element={<LogIn />} />
         </Routes>
       </BrowserRouter>
     </div>

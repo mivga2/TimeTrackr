@@ -2,6 +2,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { postNew } from "../common/api";
 import { useNavigate } from "react-router-dom";
+import { setActiveUserId } from "./LogIn";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -22,7 +23,7 @@ const Register = () => {
     e.preventDefault();
 
     userData.id = uuidv4();
-    localStorage["userId"] = userData.id;
+    setActiveUserId(userData.id);
 
     await postNew("/api/v1/user", userData);
 

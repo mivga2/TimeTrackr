@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { deleteOne, fetchOne } from "../common/api";
 import { useNavigate } from "react-router-dom";
+import { getActiveUserId, setActiveUserId } from "./LogIn";
 
 const Account = () => {
   const [user, setUser] = useState({ username: "" });
-  const id = localStorage["userId"];
+  const id = getActiveUserId();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Account = () => {
   };
 
   const logOut = () => {
-    localStorage.removeItem("userId");
+    setActiveUserId('')
     navigate("/");
   };
 

@@ -1,7 +1,7 @@
 const Shared = () => {
   return (
     <div>
-      SHARED STUFFFFFFFFFFFF
+      Shared stuff will be here
       <br />
     </div>
   );
