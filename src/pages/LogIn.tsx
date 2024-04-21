@@ -18,8 +18,8 @@ const LogIn = () => {
     // console.log("id", id)
     // console.log("loc sto", localStorage['userId'])
     // console.log("auth", auth)
-    if (auth.id) navigate("/overview");
-  }, [auth, navigate]);
+    if (localStorage["userId"]) navigate("/overview");
+  }, [navigate]);
 
   const authenticateUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ const LogIn = () => {
   };
 
   useEffect(() => {
-    if (auth.id) {
+    if (auth?.id) {
       localStorage["userId"] = auth.id;
       cleanUp();
       navigate("/account");
