@@ -1,13 +1,11 @@
 // import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { deleteOne } from "../common/api";
 
 const DeleteTask = () => {
   const navigate = useNavigate();
   const cancelRoute = "/tasks";
-  // const { id } = useParams();
-  const url = window.location.href.split('/')
-  const id = url[url.length - 1]
+  const { id } = useParams();
 
   const deleteTask = (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchOne, updateOne } from "../common/api";
 
 const EditTask = () => {
   const navigate = useNavigate();
   const cancelRoute = "/tasks";
-  // const { id } = useParams();
-  const url = window.location.href.split('/')
-  const id = url[url.length - 1]
+  const { id } = useParams();
 
   const [task, setTask] = useState({
     name: null,
