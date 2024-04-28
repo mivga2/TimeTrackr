@@ -14,6 +14,8 @@ const Events = () => {
   }, [events]);
 
   const columns = ["name", "date_from", "date_to", "calendar_id", "id"];
+  
+  const idMapping = ["edit", "delete"]
 
   const headers = {
     name: "Name",
@@ -33,6 +35,7 @@ const Events = () => {
       <Table
         title="Events list"
         columnMapping={columns}
+        idMapping={idMapping}
         headers={headers}
         data={events}
         itemType="events"

@@ -17,14 +17,17 @@ import EditEvent from "../pages/EditEvent.tsx";
 import EditTask from "../pages/EditTask.tsx";
 import DeleteEvent from "../pages/DeleteEvent.tsx";
 import DeleteTask from "../pages/DeleteTask.tsx";
+import AddFriend from "../pages/AddFriend.tsx";
+import AcceptRequest from "../pages/AcceptRequest.tsx";
+import UnfriendUser from "../pages/UnfriendFriend.tsx";
 
 const Routing = () => {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="" element={<Base />}>
-            <Route path="/" element={<Navigate to="/overview" />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="" element={<Base />}>  
             <Route path="/overview" element={<Overview />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/events" element={<Events />} />
@@ -36,11 +39,14 @@ const Routing = () => {
             <Route path="/tasks/edit/:id" element={<EditTask />} />
             <Route path="/tasks/delete/:id" element={<DeleteTask />} />
             <Route path="/friends" element={<Friends />} />
+            <Route path="/friends/add/:id" element={<AddFriend />} />
+            <Route path="/friends/accept/:id" element={<AcceptRequest />} />
+            <Route path="/friends/unfriend/:id" element={<UnfriendUser />} />
             <Route path="/shared" element={<Shared />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/account" element={<Account />} />  
+            <Route path="/account" element={<Account />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LogIn />} />
         </Routes>
       </BrowserRouter>

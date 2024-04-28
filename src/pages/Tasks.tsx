@@ -23,6 +23,8 @@ const Tasks = () => {
     "id",
   ];
 
+  const idMapping = ["edit", "delete"]
+
   const headers = {
     name: "Name",
     completion_rate_id: "Completion rate",
@@ -42,6 +44,7 @@ const Tasks = () => {
       <Table
         title="Tasks list"
         columnMapping={columns}
+        idMapping={idMapping}
         headers={headers}
         data={tasks}
         itemType="tasks"

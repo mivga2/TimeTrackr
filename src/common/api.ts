@@ -1,6 +1,7 @@
 import axios from "axios";
 // import { useState } from 'react';
-const apiUrlBase = "https://timetrackrserver.onrender.com";
+// const apiUrlBase = "https://timetrackrserver.onrender.com";
+const apiUrlBase = "http://localhost:3000";
 
 export const fetchAll = async (apiUrl: string) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
@@ -34,18 +35,17 @@ export const getUserAuthenticate = async (apiUrl: string) => {
 export const postNew = async (apiUrl: string, data: any) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
 
-  await axios
+  const response = await axios
     .post(apiEndpoint, data, {
       headers: {
         "Content-Type": "application/json",
       },
     })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
+    .catch((error) => {
       console.log(error);
     });
+
+  return response;
 };
 
 export const deleteOne = async (apiUrl: string) => {

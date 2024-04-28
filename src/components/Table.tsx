@@ -3,6 +3,7 @@ import { Data } from "../interfaces/Data";
 type TableProps = {
   title: string;
   columnMapping: any;
+  idMapping: any;
   headers: any;
   data: any;
   itemType: string;
@@ -11,6 +12,7 @@ type TableProps = {
 const Table = ({
   title,
   columnMapping,
+  idMapping,
   headers,
   data,
   itemType,
@@ -32,7 +34,11 @@ const Table = ({
       const row = columnMapping.map((item: keyof Data, i2: number) =>
         item == "id" ? (
           <td key={i2}>
-            <a href={"/" + itemType + "/edit/" + entry[item]}>edit</a> | <a href={"/" + itemType + "/delete/" + entry[item]}>delete</a>
+            {idMapping.map((it: string, i3: number) => (
+              <a href={"/" + itemType + "/" + it + "/" + entry[item]} key={i3}>
+                {it}{" "}
+              </a>
+            ))}
           </td>
         ) : (
           <td key={i2}>{entry[item]}</td>
