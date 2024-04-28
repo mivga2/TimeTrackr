@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { postNew } from "../common/api";
 import { useNavigate } from "react-router-dom";
-import { setActiveUserId } from "./LogIn";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +9,11 @@ const Register = () => {
   const [passwordVer, setPasswordVer] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("id"))
+      navigate("/overview")
+  })
 
   const userData = {
     id: "",
@@ -23,11 +27,14 @@ const Register = () => {
     e.preventDefault();
 
     userData.id = uuidv4();
-    setActiveUserId(userData.id);
+    console.log("authorizing new account");
 
-    await postNew("/api/v1/user", userData);
+    await postNew("/api/v1/user", userData).then((result) => {
+      sessionStorage.setItem("id", result?.data[0].id);
+      sessionStorage.setItem("username", result?.data[0].username);
+    });
 
-    navigate("/account");
+    navigate("/overview");
   };
 
   return (

@@ -2,19 +2,11 @@ import { useEffect, useState } from "react";
 import { getUserAuthenticate } from "../common/api";
 import { useNavigate } from "react-router-dom";
 
-export let _activeUserId = ''
-export const getActiveUserId = function() {
-  return _activeUserId;
-};
-export const setActiveUserId = function(name : string) {
-  //validate the name...
-  _activeUserId = name;
-};
-
 const LogIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useState({ id: '' });
+  const [auth, setAuth] = useState({ id: "", username: "" });
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -24,10 +16,7 @@ const LogIn = () => {
   };
 
   useEffect(() => {
-    // console.log("id", id)
-    // console.log("loc sto", localStorage['userId'])
-    // console.log("auth", auth)
-    if (getActiveUserId()) navigate("/overview");
+    if (sessionStorage.getItem("id")) navigate("/overview");
   }, [navigate]);
 
   const authenticateUser = async (e: React.FormEvent) => {
@@ -37,25 +26,33 @@ const LogIn = () => {
       `/api/v1/user/${userData.username}/${userData.password}`
     ).then((result) => {
       setAuth(result?.data[0]);
+      console.log(result?.data[0]);
     });
   };
 
   useEffect(() => {
-    if (auth?.id || getActiveUserId()) {
-      setActiveUserId(auth.id);
+    if (auth?.id) {
+      sessionStorage.setItem("id", auth.id); // session start? here alebo na serveri
+      sessionStorage.setItem("username", username);
       cleanUp();
-      navigate("/account");
-    } else console.log("WRONG PASSWORD");
-  }, [auth, navigate]);
+      navigate("/overview");
+    } else {
+      setError("Wrong username or password!");
+    }
+    console.log("WRONG PASSWORD");
+  }, [auth, navigate, username]);
 
   const cleanUp = () => {
-    setAuth({ id: '' });
+    setAuth({ id: "", username: "" });
     setUsername("");
     setPassword("");
   };
 
   return (
     <>
+      <div>
+        <p>{error}</p>
+      </div>
       <form onSubmit={authenticateUser}>
         <div>
           <label>
@@ -82,7 +79,6 @@ const LogIn = () => {
           <input type="submit" />
         </div>
       </form>
-
       <a href="/register">Create an account</a>
     </>
   );

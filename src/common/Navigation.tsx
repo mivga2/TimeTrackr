@@ -23,6 +23,9 @@ const Navigation = () => {
           <li>
             <Link to="/shared">Shared</Link>
           </li>
+          <li>
+            <Link to="/account">User</Link>
+          </li>
         </ul>
       </nav>
     </>
