@@ -3,7 +3,7 @@ import { pool } from "./server.js";
 // event queries
 export const getAllEvents = async (request, response) => {
   const res = await pool.query(
-    'SELECT * FROM public."Events"',
+    'SELECT e.id, e.name, e.date_from, e.date_to, e.calendar_id, c.name AS calendar_name FROM public."Events" AS e, public."Calendars" AS c WHERE c.id = e.calendar_id ORDER BY e.date_from',
     (error, results) => {
       if (error) {
         throw error;
@@ -93,7 +93,7 @@ export const deleteEventById = async (request, response) => {
 // task queries
 export const getAllTasks = async (request, response) => {
   const res = await pool.query(
-    'SELECT * FROM public."Tasks"',
+    'SELECT t.id, t.calendar_id, c.name AS calendar_name, t.name, t.date_due, t.event_id, e.name AS event_name, cr.description AS completion_rate_name FROM public."Tasks" AS t, public."Completion_rates" AS cr, public."Calendars" AS c, public."Events" AS e WHERE c.id = t.calendar_id AND t.event_id = e.id AND t.completion_rate_id = cr.id ORDER BY t.date_due',
     (error, results) => {
       if (error) {
         throw error;
@@ -366,5 +366,32 @@ export const postFriendRequest = async (request, response) => {
       throw error;
     }
     response.status(200).json(results.rows);
+  });
+};
+
+// calendar queries
+export const getAllEventsByCalId = async (request, response) => {
+  const sql =
+    'SELECT u.id, u.username FROM public."Friend_requests" AS fr, public."Users" AS u WHERE fr.receive_user_id = $1 AND fr.accepted = false AND u.id = fr.send_user_id';
+  const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
+  const res = await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+    console.log(res);
+  });
+};
+
+export const getAllSharedCalendars = async (request, response) => {
+  const sql =
+    'SELECT calendar_id, name FROM public."Calendar_permissions" AS cp, public."Calendars" AS c WHERE c.id = cp.calendar_id AND cp.user_id = $1 AND cp.owner = false';
+  const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
+  const res = await pool.query(sql, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+    console.log(res);
   });
 };

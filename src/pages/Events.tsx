@@ -11,9 +11,10 @@ const Events = () => {
     fetchAll("/api/v1/events").then((result) => {
       setEvents(result?.data);
     });
+    
   }, [events]);
 
-  const columns = ["name", "date_from", "date_to", "calendar_id", "id"];
+  const columns = ["name", "date_from", "date_to", "calendar_name", "id"];
   
   const idMapping = ["edit", "delete"]
 
@@ -22,6 +23,7 @@ const Events = () => {
     date_from: "Date From",
     date_to: "Date To",
     calendar_id: "Calendar",
+    calendar_name: "Calendar",
     id: "Edit or delete event",
   };
 

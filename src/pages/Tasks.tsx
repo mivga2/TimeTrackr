@@ -16,10 +16,10 @@ const Tasks = () => {
   console.log(tasks);
   const columns = [
     "name",
-    "completion_rate_id",
+    "completion_rate_name",
     "date_due",
-    "event_id",
-    "calendar_id",
+    "event_name",
+    "calendar_name",
     "id",
   ];
 
@@ -27,10 +27,10 @@ const Tasks = () => {
 
   const headers = {
     name: "Name",
-    completion_rate_id: "Completion rate",
+    completion_rate_name: "Completion rate",
     date_due: "Due Date",
-    event_id: "Associated event",
-    calendar_id: "Associated Calendar",
+    event_name: "Associated event",
+    calendar_name: "Associated Calendar",
     id: "Edit or delete task",
   };
 
