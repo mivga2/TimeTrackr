@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { postNew } from "../common/api";
+import { postNew } from "../../common/api";
 import { useNavigate } from "react-router-dom";
 
 const NewEvent = () => {

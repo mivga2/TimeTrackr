@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateOne } from "../common/api";
+import { updateOne } from "../../common/api";
 
 const AcceptRequest = () => {
   const navigate = useNavigate();

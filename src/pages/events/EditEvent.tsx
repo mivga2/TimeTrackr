@@ -1,66 +1,63 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchOne, updateOne } from "../common/api";
+import { fetchOne, updateOne } from "../../common/api";
 
-const EditTask = () => {
+const EditEvent = () => {
   const navigate = useNavigate();
-  const cancelRoute = "/tasks";
+  const cancelRoute = "/events";
   const { id } = useParams();
 
-  const [task, setTask] = useState({
+  const [event, setEvent] = useState({
     name: null,
     description: null,
-    date_due: "",
+    date_from: '',
+    date_to: '',
     location: null,
     calendar_id: null,
-    event: null,
     color: null,
-    visible: null,
   });
 
   useEffect(() => {
-    fetchOne(`/api/v1/task/${id}`).then((result) => {
-      setTask(result?.data[0]);
+    fetchOne(`/api/v1/event/${id}`).then((result) => {
+      setEvent(result?.data[0]);
     });
   }, [id]);
 
   useEffect(() => {
-    setName(task.name || "");
-    setDescription(task.description ? task.description : "");
-    setDateDue(task.date_due ? task.date_due.slice(0, 16) : "");
-    setLocation(task.location || "");
-    setCalendar(task.calendar_id || "");
-    setEvent(task.event || "");
-    setColor(task.color || "");
-    setVisible(task.visible || false);
-  }, [task]);
+    setName(event.name || '');
+    setDescription(event.description ? event.description : "");
+    setDateFrom(event.date_from ? event.date_from.slice(0, 16) : "");
+    setDateTo(event.date_to ? event.date_to.slice(0, 16) : "");
+    setLocation(event.location || '');
+    setCalendar(event.calendar_id || '');
+    setColor(event.color || '');
+  }, [event]);
 
-  const [name, setName] = useState("New Task");
+  const [name, setName] = useState("New Event");
   const [description, setDescription] = useState("");
-  const [dateDue, setDateDue] = useState(new Date().toISOString().slice(0, 16));
+  const [dateFrom, setDateFrom] = useState(
+    new Date().toISOString().slice(0, 16)
+  );
+  const [dateTo, setDateTo] = useState(new Date().toISOString().slice(0, 16));
   const [location, setLocation] = useState("");
   const [calendar, setCalendar] = useState("");
-  const [event, setEvent] = useState("");
-  const [color, setColor] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [color, setColor] = useState("#FFFFFF");
 
-  const taskData = {
+  const eventData = {
     calendar_id: calendar,
     color: color,
-    date_due: dateDue,
+    date_from: dateFrom,
+    date_to: dateTo,
     description: description,
-    event_id: event,
     id: id,
-    completion_rate_id: "471cae22-4db1-4986-ac88-a077df96aab0",
+    location: location,
     name: name,
-    visible: visible,
   };
 
-  const updateTask = (e: React.FormEvent) => {
+  const updateEvent = (e: React.FormEvent) => {
     e.preventDefault();
-    taskData.event_id = "5012bda6-340b-4d9e-8ffa-880f1d78fca2";
 
-    updateOne(`/api/v1/task/${id}`, taskData);
+    updateOne(`/api/v1/event/${id}`, eventData);
     navigate(cancelRoute);
   };
 
@@ -70,7 +67,7 @@ const EditTask = () => {
 
   return (
     <div>
-      <form onSubmit={updateTask}>
+      <form onSubmit={updateEvent}>
         <div>
           <input
             type="text"
@@ -93,8 +90,18 @@ const EditTask = () => {
             Date from:
             <input
               type="datetime-local"
-              value={dateDue}
-              onChange={(e) => setDateDue(e.target.value)}
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Date to:
+            <input
+              type="datetime-local"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
             />
           </label>
         </div>
@@ -123,28 +130,6 @@ const EditTask = () => {
         </div>
         <div>
           <label>
-            Visible in calendar:
-            <input
-              type="checkbox"
-              checked={visible}
-              onChange={(e) => setVisible(e.target.checked)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Associated event:
-            <select value={event} onChange={(e) => setEvent(e.target.value)}>
-              <option value="5012bda6-340b-4d9e-8ffa-880f1d78fca2">none</option>
-              <option value="5012bda6-340b-4d9e-8ffa-880f1d78fca2">
-                optiontopick1
-              </option>
-              <option value="5012bda6-340b-4d9e-8ffa-880f1d78fca2">op2</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
             Color:
             <input
               type="color"
@@ -161,4 +146,4 @@ const EditTask = () => {
   );
 };
 
-export default EditTask;
+export default EditEvent;

@@ -1,25 +1,25 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Calendar from "../pages/Calendar.tsx";
-import Events from "../pages/Events.tsx";
-import Tasks from "../pages/Tasks.tsx";
-import Shared from "../pages/Shared.tsx";
-import Friends from "../pages/Friends.tsx";
+import Calendar from "../pages/calendar/Calendar.tsx";
+import Events from "../pages/events/Events.tsx";
+import Tasks from "../pages/tasks/Tasks.tsx";
+import Shared from "../pages/shared/Shared.tsx";
+import Friends from "../pages/friends/Friends.tsx";
 import NotFound from "./NotFound.tsx";
 import Overview from "../pages/Overview.tsx";
 import Base from "./Base.tsx";
-import Register from "../pages/Register.tsx";
-import Account from "../pages/Account.tsx";
-import LogIn from "../pages/LogIn.tsx";
-import NewEvent from "../pages/NewEvent.tsx";
-import NewTask from "../pages/NewTask.tsx";
-import EditEvent from "../pages/EditEvent.tsx";
-import EditTask from "../pages/EditTask.tsx";
-import DeleteEvent from "../pages/DeleteEvent.tsx";
-import DeleteTask from "../pages/DeleteTask.tsx";
-import AddFriend from "../pages/AddFriend.tsx";
-import AcceptRequest from "../pages/AcceptRequest.tsx";
-import UnfriendUser from "../pages/UnfriendFriend.tsx";
+import Register from "../pages/user/Register.tsx";
+import Account from "../pages/user/Account.tsx";
+import LogIn from "../pages/user/LogIn.tsx";
+import NewEvent from "../pages/events/NewEvent.tsx";
+import NewTask from "../pages/tasks/NewTask.tsx";
+import EditEvent from "../pages/events/EditEvent.tsx";
+import EditTask from "../pages/tasks/EditTask.tsx";
+import DeleteEvent from "../pages/events/DeleteEvent.tsx";
+import DeleteTask from "../pages/tasks/DeleteTask.tsx";
+import AddFriend from "../pages/friends/AddFriend.tsx";
+import AcceptRequest from "../pages/friends/AcceptRequest.tsx";
+import UnfriendUser from "../pages/friends/UnfriendFriend.tsx";
 
 const Routing = () => {
   return (

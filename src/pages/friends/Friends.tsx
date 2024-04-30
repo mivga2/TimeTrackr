@@ -1,5 +1,5 @@
-import Table from "../components/Table";
-import { fetchAll } from "../common/api";
+import Table from "../../components/Table";
+import { fetchAll } from "../../common/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

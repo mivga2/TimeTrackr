@@ -9,7 +9,11 @@ import pg from "pg";
 const { Pool } = pg;
 dotenv.config();
 
-import * as q from "./queries.js";
+import * as tq from "./task-queries.js";
+import * as eq from "./event-queries.js";
+import * as uq from "./user-queries.js";
+import * as fq from "./friend-queries.js";
+import * as cq from "./calendar-queries.js";
 
 app.use(cors());
 
@@ -45,37 +49,37 @@ app.get("/", (req, res) => {
 });
 
 // get list of all items
-app.get("/api/v1/events", q.getAllEvents);
-app.get("/api/v1/tasks", q.getAllTasks);
-app.get("/api/v1/friends", q.getAllFriends);
-app.get("/api/v1/users", q.getAllUsers);
-app.get("/api/v1/requests", q.getAllPendingFriendRequests);
-app.get("/api/v1/sent-requests", q.getAllSentFriendRequests);
+app.get("/api/v1/events", eq.getAllEvents);
+app.get("/api/v1/tasks", tq.getAllTasks);
+app.get("/api/v1/friends", fq.getAllFriends);
+app.get("/api/v1/users", uq.getAllUsers);
+app.get("/api/v1/requests", fq.getAllPendingFriendRequests);
+app.get("/api/v1/sent-requests", fq.getAllSentFriendRequests);
 
 // get item by id
-app.get("/api/v1/user/:id", q.getUserById);
-app.get("/api/v1/user/:username/:password", q.getUserByName);
-app.get("/api/v1/event/:id", q.getEventById);
-app.get("/api/v1/task/:id", q.getTaskById);
+app.get("/api/v1/user/:id", uq.getUserById);
+app.get("/api/v1/user/:username/:password", uq.getUserByName);
+app.get("/api/v1/event/:id", eq.getEventById);
+app.get("/api/v1/task/:id", tq.getTaskById);
 
 // create new item
-app.post("/api/v1/event", q.postEvent);
-app.post("/api/v1/task", q.postTask);
-app.post("/api/v1/user", q.postUser);
-app.post("/api/v1/friend-request", q.postFriendRequest);
+app.post("/api/v1/event", eq.postEvent);
+app.post("/api/v1/task", tq.postTask);
+app.post("/api/v1/user", uq.postUser);
+app.post("/api/v1/friend-request", fq.postFriendRequest);
 
 // update item by id
-app.put("/api/v1/event/:id", q.putEventById);
-app.put("/api/v1/task/:id", q.putTaskById);
+app.put("/api/v1/event/:id", eq.putEventById);
+app.put("/api/v1/task/:id", tq.putTaskById);
 
 // update friend request by receiver
-app.put("/api/v1/friend-request/sender/:send_id/receiver/:receive_id", q.putRequestByIds);
+app.put("/api/v1/friend-request/sender/:send_id/receiver/:receive_id", fq.putRequestByIds);
 
 // delete item by id
-app.delete("/api/v1/user/:id", q.deleteUserById);
-app.delete("/api/v1/event/:id", q.deleteEventById);
-app.delete("/api/v1/task/:id", q.deleteTaskById);
-app.delete("/api/v1/friend-request/sender/:send_id/receiver/:receive_id", q.deleteFriendByIds);
+app.delete("/api/v1/user/:id", uq.deleteUserById);
+app.delete("/api/v1/event/:id", eq.deleteEventById);
+app.delete("/api/v1/task/:id", tq.deleteTaskById);
+app.delete("/api/v1/friend-request/sender/:send_id/receiver/:receive_id", fq.deleteFriendByIds);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

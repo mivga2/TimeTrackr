@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUserAuthenticate } from "../common/api";
+import { getUserAuthenticate } from "../../common/api";
 import { useNavigate } from "react-router-dom";
 
 const LogIn = () => {
@@ -26,7 +26,6 @@ const LogIn = () => {
       `/api/v1/user/${userData.username}/${userData.password}`
     ).then((result) => {
       setAuth(result?.data[0]);
-      console.log(result?.data[0]);
     });
   };
 

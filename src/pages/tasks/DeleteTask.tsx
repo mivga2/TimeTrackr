@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteOne } from "../common/api";
+import { deleteOne } from "../../common/api";
 
 const DeleteTask = () => {
   const navigate = useNavigate();

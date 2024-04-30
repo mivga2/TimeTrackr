@@ -1,22 +1,16 @@
 // import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { postNew } from "../common/api";
+import { deleteOne } from "../../common/api";
 
-const AddFriend = () => {
+const UnfriendUser = () => {
   const navigate = useNavigate();
   const cancelRoute = "/friends";
   const { id } = useParams();
 
-  const requestData = {
-    sender_id: sessionStorage.getItem("id"),
-    receiver_id: id,
-    date: new Date(),
-  };
-
-  const addFriend = (e: React.FormEvent) => {
+  const unfriendUser = (e: React.FormEvent) => {
     e.preventDefault();
 
-    postNew(`/api/v1/friend-request/`, requestData);
+    deleteOne(`/api/v1/friend-request/sender/${id}/receiver/${sessionStorage.getItem("id")}`);
     navigate(cancelRoute);
   };
 
@@ -28,13 +22,13 @@ const AddFriend = () => {
     <div>
       <form onSubmit={cancel}>
         <p>
-          <b>Do you really wish to delete the task?</b>
+          <b>Do you really wish to unfriend the user?</b>
         </p>
         <input type="submit" value="Cancel" />
-        <input type="button" value="Send request" onClick={addFriend} />
+        <input type="button" value="Unfriend" onClick={unfriendUser} />
       </form>
     </div>
   );
 };
 
-export default AddFriend;
+export default UnfriendUser;

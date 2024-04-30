@@ -1,4 +1,4 @@
-import { deleteOne } from "../common/api";
+import { deleteOne } from "../../common/api";
 import { useNavigate } from "react-router-dom";
 
 const Account = () => {

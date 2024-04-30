@@ -29,7 +29,6 @@ const Table = ({
     /* generate table rows from columnMapping and data props */
   }
   if (data) {
-    console.log(data[0]);
     columnEntries = data.map((entry: Data, i1: number) => {
       const row = columnMapping.map((item: keyof Data, i2: number) =>
         item == "id" ? (
