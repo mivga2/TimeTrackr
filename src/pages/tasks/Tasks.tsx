@@ -2,13 +2,19 @@ import Table from "../../components/Table";
 import { fetchAll } from "../../common/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Task } from "../../interfaces/Task";
+import { formatDateTime } from "../../common/timeFormat";
 
 const Tasks = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState(null);
 
   useEffect(() => {
-    fetchAll("/api/v1/tasks").then((result) => {
+    fetchAll("/api/v1/tasks").then((result) => {      
+      result?.data.map((task: Task) => {
+        task.date_due = formatDateTime(task.date_due);
+      });
+
       setTasks(result?.data);
     });
   }, [tasks]);

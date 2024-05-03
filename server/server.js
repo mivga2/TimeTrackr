@@ -55,6 +55,8 @@ app.get("/api/v1/friends", fq.getAllFriends);
 app.get("/api/v1/users", uq.getAllUsers);
 app.get("/api/v1/requests", fq.getAllPendingFriendRequests);
 app.get("/api/v1/sent-requests", fq.getAllSentFriendRequests);
+app.get("/api/v1/calendars", cq.getAllOwnedCalendars);
+app.get("/api/v1/events/:calendar_id", cq.getAllEventsByCalId);
 
 // get item by id
 app.get("/api/v1/user/:id", uq.getUserById);

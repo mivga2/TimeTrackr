@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchOne, updateOne } from "../../common/api";
+import { fetchAll, fetchOne, updateOne } from "../../common/api";
 
 const EditEvent = () => {
   const navigate = useNavigate();
   const cancelRoute = "/events";
   const { id } = useParams();
+  const [calendarLookup, setCalendarLookup] = useState([]);
 
   const [event, setEvent] = useState({
     name: null,
     description: null,
-    date_from: '',
-    date_to: '',
+    date_from: "",
+    date_to: "",
     location: null,
     calendar_id: null,
     color: null,
@@ -21,16 +22,20 @@ const EditEvent = () => {
     fetchOne(`/api/v1/event/${id}`).then((result) => {
       setEvent(result?.data[0]);
     });
+
+    fetchAll("/api/v1/calendars").then((result) => {
+      setCalendarLookup(result?.data);
+    });
   }, [id]);
 
   useEffect(() => {
-    setName(event.name || '');
+    setName(event.name || "");
     setDescription(event.description ? event.description : "");
     setDateFrom(event.date_from ? event.date_from.slice(0, 16) : "");
     setDateTo(event.date_to ? event.date_to.slice(0, 16) : "");
-    setLocation(event.location || '');
-    setCalendar(event.calendar_id || '');
-    setColor(event.color || '');
+    setLocation(event.location || "");
+    setCalendar(event.calendar_id || "");
+    setColor(event.color || "");
   }, [event]);
 
   const [name, setName] = useState("New Event");
@@ -52,6 +57,21 @@ const EditEvent = () => {
     id: id,
     location: location,
     name: name,
+  };
+
+  const calendarSelect = (calendarsList) => {
+    const calendarOptions = calendarsList.map((calendarOpt, i: number) =>
+      calendarOpt.calendar_id === calendar ? (
+        <option key={i} value={calendarOpt.calendar_id} selected>
+          {calendarOpt.name}
+        </option>
+      ) : (
+        <option key={i} value={calendarOpt.calendar_id}>
+          {calendarOpt.name}
+        </option>
+      )
+    );
+    return calendarOptions;
   };
 
   const updateEvent = (e: React.FormEvent) => {
@@ -122,9 +142,8 @@ const EditEvent = () => {
               value={calendar}
               onChange={(e) => setCalendar(e.target.value)}
             >
-              <option value="26d44e0c-1963-4833-9fcc-258fcc59e028">none</option>
-              <option value="1">optiontopick1</option>
-              <option value="2">op2</option>
+              <option></option>
+              {calendarSelect(calendarLookup)}
             </select>
           </label>
         </div>

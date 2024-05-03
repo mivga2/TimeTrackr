@@ -13,12 +13,11 @@ const Events = () => {
   useEffect(() => {
     fetchAll("/api/v1/events")
       .then((result) => {
-        if (result) {
-          result?.data.forEach((event: Event) => {
-            event.date_from = formatDateTime(event.date_from);
-            event.date_to = formatDateTime(event.date_to);
-          });
-        }
+        result?.data.map((event: Event) => {
+          event.date_from = formatDateTime(event.date_from);
+          event.date_to = formatDateTime(event.date_to);
+        });
+
         setEvents(result?.data);
       })
       .then(() => setIsLoading(false));

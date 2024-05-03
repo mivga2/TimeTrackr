@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchOne, updateOne } from "../../common/api";
+import { fetchAll, fetchOne, updateOne } from "../../common/api";
 
 const EditTask = () => {
   const navigate = useNavigate();
   const cancelRoute = "/tasks";
   const { id } = useParams();
+  const [calendarLookup, setCalendarLookup] = useState([]);
+  const [eventLookup, setEventLookup] = useState([]);
 
+  useEffect(() => {
+    fetchAll("/api/v1/calendars").then((result) => {
+      setCalendarLookup(result?.data);
+    });
+  }, []);
   const [task, setTask] = useState({
     name: null,
     description: null,
@@ -43,6 +50,42 @@ const EditTask = () => {
   const [event, setEvent] = useState("");
   const [color, setColor] = useState("");
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    fetchAll(`/api/v1/events/${calendar}`).then((result) => {
+      setEventLookup(result?.data);
+    });
+  }, [calendar]);
+
+  const eventSelect = (eventsList) => {
+    const eventOptions = eventsList.map((eventOpt, i: number) =>
+      eventOpt.id === event ? (
+        <option key={i} value={eventOpt.id} selected>
+          {eventOpt.name}
+        </option>
+      ) : (
+        <option key={i} value={eventOpt.id}>
+          {eventOpt.name}
+        </option>
+      )
+    );
+    return eventOptions;
+  };
+
+  const calendarSelect = (calendarsList) => {
+    const calendarOptions = calendarsList.map((calendarOpt, i: number) =>
+      calendarOpt.calendar_id === calendar ? (
+        <option key={i} value={calendarOpt.calendar_id} selected>
+          {calendarOpt.name}
+        </option>
+      ) : (
+        <option key={i} value={calendarOpt.calendar_id}>
+          {calendarOpt.name}
+        </option>
+      )
+    );
+    return calendarOptions;
+  };
 
   const taskData = {
     calendar_id: calendar,
@@ -115,9 +158,8 @@ const EditTask = () => {
               value={calendar}
               onChange={(e) => setCalendar(e.target.value)}
             >
-              <option value="26d44e0c-1963-4833-9fcc-258fcc59e028">none</option>
-              <option value="1">optiontopick1</option>
-              <option value="2">op2</option>
+              <option></option>
+              {calendarSelect(calendarLookup)}
             </select>
           </label>
         </div>
@@ -135,11 +177,8 @@ const EditTask = () => {
           <label>
             Associated event:
             <select value={event} onChange={(e) => setEvent(e.target.value)}>
-              <option value="5012bda6-340b-4d9e-8ffa-880f1d78fca2">none</option>
-              <option value="5012bda6-340b-4d9e-8ffa-880f1d78fca2">
-                optiontopick1
-              </option>
-              <option value="5012bda6-340b-4d9e-8ffa-880f1d78fca2">op2</option>
+              <option></option>
+              {eventSelect(eventLookup)}
             </select>
           </label>
         </div>
