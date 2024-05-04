@@ -20,7 +20,7 @@ const EditTask = () => {
     date_due: "",
     location: null,
     calendar_id: null,
-    event: null,
+    event_id: null,
     color: null,
     visible: null,
   });
@@ -28,6 +28,7 @@ const EditTask = () => {
   useEffect(() => {
     fetchOne(`/api/v1/task/${id}`).then((result) => {
       setTask(result?.data[0]);
+      console.log(result?.data);
     });
   }, [id]);
 
@@ -37,7 +38,7 @@ const EditTask = () => {
     setDateDue(task.date_due ? task.date_due.slice(0, 16) : "");
     setLocation(task.location || "");
     setCalendar(task.calendar_id || "");
-    setEvent(task.event || "");
+    setEvent(task.event_id || "");
     setColor(task.color || "");
     setVisible(task.visible || false);
   }, [task]);
@@ -52,9 +53,13 @@ const EditTask = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    fetchAll(`/api/v1/events/${calendar}`).then((result) => {
-      setEventLookup(result?.data);
-    });
+    if (calendar) {
+      fetchAll(`/api/v1/events/${calendar}`).then((result) => {
+        setEventLookup(result?.data);
+      });
+    } else {
+      setEventLookup([]);
+    }
   }, [calendar]);
 
   const eventSelect = (eventsList) => {
@@ -101,7 +106,7 @@ const EditTask = () => {
 
   const updateTask = (e: React.FormEvent) => {
     e.preventDefault();
-    taskData.event_id = "5012bda6-340b-4d9e-8ffa-880f1d78fca2";
+    //taskData.event_id = "5012bda6-340b-4d9e-8ffa-880f1d78fca2";
 
     updateOne(`/api/v1/task/${id}`, taskData);
     navigate(cancelRoute);

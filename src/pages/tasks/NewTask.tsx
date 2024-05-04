@@ -20,14 +20,18 @@ const NewTask = () => {
   const [dateDue, setDateDue] = useState(new Date().toISOString().slice(0, 16));
   const [location, setLocation] = useState("");
   const [calendar, setCalendar] = useState("");
-  const [event, setEvent] = useState("e3195053-df09-4bfe-ae43-37fe0803d416");
+  const [event, setEvent] = useState("");
   const [color, setColor] = useState("#FFFFFF");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    fetchAll(`/api/v1/events/${calendar}`).then((result) => {
-      setEventLookup(result?.data);
-    });
+    if (calendar) {
+      fetchAll(`/api/v1/events/${calendar}`).then((result) => {
+        setEventLookup(result?.data);
+      });
+    } else {
+      setEventLookup([]);
+    }
   }, [calendar]);
 
   const eventSelect = (eventsList) => {
