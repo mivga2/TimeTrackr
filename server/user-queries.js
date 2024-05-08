@@ -1,4 +1,5 @@
 import { pool } from "./server.js";
+import jwt from "jsonwebtoken";
 
 // user queries
 export const getAllUsers = async (request, response) => {
@@ -32,19 +33,7 @@ export const getAllUsers = async (request, response) => {
       if (error) {
         throw error;
       }
-  
-      request.session.save(() => {
-        request.session.logged_in = true;
-        request.session.user = {
-          id: results.id,
-          username: results.username,
-        };
-      });
-  
       response.status(200).json(results.rows);
-  
-      console.log("session: ", response.session);
-      console.log("reSPOnSeeeeeeee", results);
     });
   };
   
@@ -60,26 +49,50 @@ export const getAllUsers = async (request, response) => {
     });
   };
   
-  export const getUserByName = async (request, response) => {
+  export const getUserByNamePass = async (request, response) => {
     const sql =
-      'SELECT id FROM public."Users" WHERE username = $1 AND password = $2';
+      'SELECT id, username FROM public."Users" WHERE username = $1 AND password = $2';
     const values = [request.params.username, request.params.password];
     const res = await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;
       }
+
+      if (!results.rows) {
+        console.log(results)
+        return response.status(400).send("Invalid username or password")
+      }
+      // eslint-disable-next-line no-undef
+      const token = jwt.sign({userId: results.id}, process.env.Secret)
+      results.rows.push({token: token})
       response.status(200).json(results.rows);
     });
   };
   
+  export const getUserByName = async (request, response) => {
+    const sql =
+      'SELECT username FROM public."Users" WHERE username = $1';
+    const values = [request.params.username];
+    console.log(request.params.username)
+    await pool.query(sql, values, (error, results) => {
+      if (error) {
+        throw error;
+      }
+
+      response.status(200).json(results.rows);
+    });
+  };
+
   export const deleteUserById = async (request, response) => {
     const sql = 'UPDATE public."Users" SET disabled = true WHERE id = $1;';
     const values = [request.params.id];
+    console.log(request.params.id)
   
     await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;
       }
+      console.log(results.rows)
       response.status(200).json(results.rows);
     });
   };

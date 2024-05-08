@@ -16,30 +16,29 @@ const LogIn = () => {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("id")) navigate("/overview");
+    if (localStorage.getItem("token")) navigate("/overview");
   }, [navigate]);
 
   const authenticateUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await getUserAuthenticate(
-      `/api/v1/user/${userData.username}/${userData.password}`
-    ).then((result) => {
-      setAuth(result?.data[0]);
-    });
-  };
+    try {
+      await getUserAuthenticate(
+        `/api/v1/user/${userData.username}/${userData.password}`
+      ).then((result) => {
+        console.log(result?.data);
+        localStorage.setItem("userId", result?.data[0].id);
+        localStorage.setItem("username", result?.data[0].username);
+        localStorage.setItem("token", result?.data[1].token);
 
-  useEffect(() => {
-    if (auth?.id) {
-      sessionStorage.setItem("id", auth.id); // session start? here alebo na serveri
-      sessionStorage.setItem("username", username);
-      cleanUp();
-      navigate("/overview");
-    } else {
+        cleanUp();
+        navigate("/overview");
+      });
+    } catch (error) {
+      localStorage.removeItem("token");
       setError("Wrong username or password!");
     }
-    console.log("WRONG PASSWORD");
-  }, [auth, navigate, username]);
+  };
 
   const cleanUp = () => {
     setAuth({ id: "", username: "" });

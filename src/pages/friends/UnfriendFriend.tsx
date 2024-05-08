@@ -10,7 +10,7 @@ const UnfriendUser = () => {
   const unfriendUser = (e: React.FormEvent) => {
     e.preventDefault();
 
-    deleteOne(`/api/v1/friend-request/sender/${id}/receiver/${sessionStorage.getItem("id")}`);
+    deleteOne(`/api/v1/friend-request/sender/${id}/receiver/${localStorage.getItem("userId")}`);
     navigate(cancelRoute);
   };
 

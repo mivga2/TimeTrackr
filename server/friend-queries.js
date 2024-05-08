@@ -5,6 +5,7 @@ export const getAllFriends = async (request, response) => {
     const sql =
       'SELECT u.username, u.id FROM public."Friends" AS f, public."Users" AS u WHERE f.user2_id = $1 AND f.user1_id = u.id UNION SELECT u.username, u.id FROM public."Friends" AS f, public."Users" AS u WHERE f.user1_id = $1 AND f.user2_id = u.id';
     const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
+    console.log("ALLFRIENDS",request.session)
     const res = await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;

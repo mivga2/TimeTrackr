@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const navigate = useNavigate();
-  const id = sessionStorage.getItem("id");
+  const id = localStorage.getItem("userId");
 
   const logOut = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     navigate("/");
   };
 
@@ -17,7 +17,7 @@ const Account = () => {
 
   return (
     <div>
-      <p>{sessionStorage.getItem("username")}</p>
+      <p>{localStorage.getItem("username")}</p>
 
       <button onClick={logOut}>Log Out</button>
       <button onClick={deleteAccount}>DELETE</button>

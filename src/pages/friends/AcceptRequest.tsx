@@ -10,7 +10,7 @@ const AcceptRequest = () => {
   const acceptRequest = (e: React.FormEvent) => {
     e.preventDefault();
 
-    updateOne(`/api/v1/friend-request/sender/${id}/receiver/${sessionStorage.getItem("id")}`, {});
+    updateOne(`/api/v1/friend-request/sender/${id}/receiver/${localStorage.getItem("userId")}`, {});
     navigate(cancelRoute);
   };
 

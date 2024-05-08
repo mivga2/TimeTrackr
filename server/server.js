@@ -1,5 +1,5 @@
 import express from "express";
-import session from "express-session";
+import jwt from "jsonwebtoken";
 import bodyParser from "body-parser";
 const app = express();
 const port = 3000;
@@ -24,15 +24,6 @@ app.use(
   })
 );
 
-app.use(
-  session({
-    // eslint-disable-next-line no-undef
-    secret: process.env.SessionSecret,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 export const pool = new Pool({
   // eslint-disable-next-line no-undef
   connectionString: process.env.DBConnLink,
@@ -43,15 +34,14 @@ export const pool = new Pool({
 
 app.get("/", (req, res) => {
   res.send("Hello from our server!");
-  const sessionData = req.session;
-  console.log(sessionData)
-  // res.send(sessionData)
 });
 
 // get list of all items
 app.get("/api/v1/events", eq.getAllEvents);
 app.get("/api/v1/tasks", tq.getAllTasks);
-app.get("/api/v1/friends", fq.getAllFriends);
+app.get("/api/v1/friends", (req, res) => {
+  fq.getAllFriends(req, res);
+});
 app.get("/api/v1/users", uq.getAllUsers);
 app.get("/api/v1/requests", fq.getAllPendingFriendRequests);
 app.get("/api/v1/sent-requests", fq.getAllSentFriendRequests);
@@ -60,7 +50,8 @@ app.get("/api/v1/events/:calendar_id", cq.getAllEventsByCalId);
 
 // get item by id
 app.get("/api/v1/user/:id", uq.getUserById);
-app.get("/api/v1/user/:username/:password", uq.getUserByName);
+app.get("/api/v1/user/name/:username", uq.getUserByName);
+app.get("/api/v1/user/:username/:password", uq.getUserByNamePass);
 app.get("/api/v1/event/:id", eq.getEventById);
 app.get("/api/v1/task/:id", tq.getTaskById);
 
@@ -75,13 +66,19 @@ app.put("/api/v1/event/:id", eq.putEventById);
 app.put("/api/v1/task/:id", tq.putTaskById);
 
 // update friend request by receiver
-app.put("/api/v1/friend-request/sender/:send_id/receiver/:receive_id", fq.putRequestByIds);
+app.put(
+  "/api/v1/friend-request/sender/:send_id/receiver/:receive_id",
+  fq.putRequestByIds
+);
 
 // delete item by id
 app.delete("/api/v1/user/:id", uq.deleteUserById);
 app.delete("/api/v1/event/:id", eq.deleteEventById);
 app.delete("/api/v1/task/:id", tq.deleteTaskById);
-app.delete("/api/v1/friend-request/sender/:send_id/receiver/:receive_id", fq.deleteFriendByIds);
+app.delete(
+  "/api/v1/friend-request/sender/:send_id/receiver/:receive_id",
+  fq.deleteFriendByIds
+);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

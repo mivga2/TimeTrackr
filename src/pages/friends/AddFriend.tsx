@@ -8,7 +8,7 @@ const AddFriend = () => {
   const { id } = useParams();
 
   const requestData = {
-    sender_id: sessionStorage.getItem("id"),
+    sender_id: localStorage.getItem("userId"),
     receiver_id: id,
     date: new Date(),
   };

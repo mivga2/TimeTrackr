@@ -1,13 +1,31 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
+import { useEffect, useState } from "react";
+import NoPermission from "./NoPermission";
 
 const Base = () => {
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+    setLoading(false);
+  }, []);
+
+  if (loading || !token) {
+    return (
+      <>
+        <NoPermission />
+      </>
+    );
+  }
   return (
     <>
       <Navigation />
       <div className="router-view">
-        <Outlet />
+        <Outlet context={token} />
       </div>
       <Footer />
     </>
