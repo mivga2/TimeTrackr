@@ -10,7 +10,6 @@ const NewTask = () => {
   const cancelRoute = "/tasks";
   const [calendarLookup, setCalendarLookup] = useState([]);
   const [eventLookup, setEventLookup] = useState([]);
-  const [errorList, setErrorList] = useState<Array<JSX.Element>>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [name, setName] = useState("New Task");

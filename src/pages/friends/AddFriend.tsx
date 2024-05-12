@@ -1,7 +1,6 @@
 // import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { postNew } from "../../common/api";
-import { cancel } from "../../common/formFunctions";
 
 const AddFriend = () => {
   const navigate = useNavigate();

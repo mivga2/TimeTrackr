@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
-import Footer from "./Footer";
 import { useEffect, useState } from "react";
 import NoPermission from "./NoPermission";
 
