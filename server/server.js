@@ -60,7 +60,7 @@ app.post("/api/v1/task", verifyToken, tq.postTask);
 app.post("/api/v1/user", uq.postUser);
 app.post("/api/v1/friend-request", verifyToken, fq.postFriendRequest);
 app.post("/api/v1/calendar/share/:calendar_id", verifyToken, cq.postCalendarPermission);
-
+app.post("/api/v1/calendar", verifyToken, cq.postCalendar);
 
 // update item by id
 app.put("/api/v1/event/:id", verifyToken, eq.putEventById);

@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Calendar from "../pages/calendar/Calendar.tsx";
 import Events from "../pages/events/Events.tsx";
 import Tasks from "../pages/tasks/Tasks.tsx";
-import Shared from "../pages/shared/Shared.tsx";
 import Friends from "../pages/friends/Friends.tsx";
 import NotFound from "./NotFound.tsx";
 import Overview from "../pages/Overview.tsx";
@@ -20,6 +19,8 @@ import DeleteTask from "../pages/tasks/DeleteTask.tsx";
 import AddFriend from "../pages/friends/AddFriend.tsx";
 import AcceptRequest from "../pages/friends/AcceptRequest.tsx";
 import UnfriendUser from "../pages/friends/UnfriendFriend.tsx";
+import ShareCalendar from "../pages/calendar/ShareCalendar.tsx";
+import NewCalendar from "../pages/calendar/NewCalendar.tsx";
 
 const Routing = () => {
   return (
@@ -30,6 +31,8 @@ const Routing = () => {
           <Route path="" element={<Base />}>  
             <Route path="/overview" element={<Overview />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/calendar/new" element={<NewCalendar />} />
+            <Route path="/calendar/share/:id" element={<ShareCalendar />} />
             <Route path="/events" element={<Events />} />
             <Route path="/events/new" element={<NewEvent />} />
             <Route path="/events/edit/:id" element={<EditEvent />} />
@@ -42,7 +45,6 @@ const Routing = () => {
             <Route path="/friends/add/:id" element={<AddFriend />} />
             <Route path="/friends/accept/:id" element={<AcceptRequest />} />
             <Route path="/friends/unfriend/:id" element={<UnfriendUser />} />
-            <Route path="/shared" element={<Shared />} />
             <Route path="/account" element={<Account />} />
             <Route path="*" element={<NotFound />} />
           </Route>
