@@ -4,11 +4,23 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Friends } from "../../interfaces/Friends";
 
 const ShareCalendar = () => {
-  const shareTo = new Set();
+  const [shareTo, setShareTo] = useState(new Set());
   const [friendsCheckboxs, setFriendsCheckboxs] = useState<JSX.Element>(<></>);
   const cancelRoute = "/calendar";
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // checked friends will be granted permission
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const tmpShare = shareTo
+    if (e.target.checked) {
+      tmpShare.add(value);
+    } else {
+      tmpShare.delete(value);
+    }
+    setShareTo(tmpShare)
+  };
 
   useEffect(() => {
     // makes checkbox list of friends
@@ -41,21 +53,13 @@ const ShareCalendar = () => {
 
   const share = (e: React.FormEvent) => {
     e.preventDefault();
+
     shareTo.forEach((item) => {
       postNew(`/api/v1/calendar/share/${id}`, { id: item });
     });
     navigate(cancelRoute);
   };
 
-  // checked friends will be granted permission
-  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (e.target.checked) {
-      shareTo.add(value);
-    } else {
-      shareTo.delete(value);
-    }
-  };
 
   const cancel = () => {
     navigate(cancelRoute);
@@ -63,13 +67,13 @@ const ShareCalendar = () => {
 
   return (
     <div>
-      <form>
+      <form onSubmit={share}>
         <p>Who do you want to share the calendar with?</p>
         {friendsCheckboxs}
         <button type="submit" onClick={cancel}>
           Cancel
         </button>
-        <button onClick={share}>Share</button>
+        <button>Share</button>
       </form>
     </div>
   );

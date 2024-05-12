@@ -70,6 +70,7 @@ const Calendar = () => {
 
     fetchAll(`/api/v1/shared/calendars`).then((result) => {
       setSharedCalendars(result?.data);
+      console.log(result?.data)
       if (result?.data.length !== 0) {
         if (calendars.length === 0) {
           // first calendar is displayed
