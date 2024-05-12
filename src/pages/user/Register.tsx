@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { fetchAll, postNew, getUserAuthenticate } from "../../common/api";
+import {
+  getUserAuthenticate,
+  postNewUser,
+  fetchAllUserdata,
+} from "../../common/api";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 const Register = () => {
@@ -38,16 +42,18 @@ const Register = () => {
     userData.id = uuidv4();
     console.log("authorizing new account");
 
-    await fetchAll(`/api/v1/user/name/${userData.username}`).then((result) => {
-      if (result?.data[0]) {
-        setError("Username already exists!");
-        return;
-      } else {
-        setError("");
+    await fetchAllUserdata(`/api/v1/user/name/${userData.username}`).then(
+      (result) => {
+        if (result?.data[0]) {
+          setError("Username already exists!");
+          return;
+        } else {
+          setError("");
+        }
       }
-    });
+    );
 
-    await postNew("/api/v1/user", userData).then((result) => {
+    await postNewUser("/api/v1/user", userData).then((result) => {
       console.log("New user created");
     });
 
@@ -60,7 +66,7 @@ const Register = () => {
       localStorage.setItem("token", result?.data[1].token);
     });
 
-    console.log(localStorage)
+    console.log(localStorage);
     // cleanUp();
     navigate("/overview");
   };
@@ -77,6 +83,7 @@ const Register = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoFocus
+              required
             />
           </label>
         </div>
@@ -87,6 +94,7 @@ const Register = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </label>
         </div>
@@ -97,6 +105,7 @@ const Register = () => {
               type="password"
               value={passwordVer}
               onChange={(e) => setPasswordVer(e.target.value)}
+              required
             />
           </label>
         </div>

@@ -4,8 +4,7 @@ import { pool } from "./server.js";
 export const getAllFriends = async (request, response) => {
     const sql =
       'SELECT u.username, u.id FROM public."Friends" AS f, public."Users" AS u WHERE f.user2_id = $1 AND f.user1_id = u.id UNION SELECT u.username, u.id FROM public."Friends" AS f, public."Users" AS u WHERE f.user1_id = $1 AND f.user2_id = u.id';
-    const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
-    console.log("ALLFRIENDS",request.session)
+    const values = [request.userId];
     const res = await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;
@@ -18,7 +17,7 @@ export const getAllFriends = async (request, response) => {
   export const getAllPendingFriendRequests = async (request, response) => {
     const sql =
       'SELECT u.id, u.username FROM public."Friend_requests" AS fr, public."Users" AS u WHERE fr.receive_user_id = $1 AND fr.accepted = false AND u.id = fr.send_user_id';
-    const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
+    const values = [request.userId];
     const res = await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;
@@ -30,7 +29,7 @@ export const getAllFriends = async (request, response) => {
   export const getAllSentFriendRequests = async (request, response) => {
     const sql =
       'SELECT u.id, u.username FROM public."Friend_requests" AS fr, public."Users" AS u WHERE fr.send_user_id = $1 AND fr.accepted = false AND u.id = fr.receive_user_id';
-    const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
+    const values = [request.userId];
     const res = await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;

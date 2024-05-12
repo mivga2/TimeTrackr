@@ -60,6 +60,7 @@ const LogIn = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoFocus
+              required
             />
           </label>
         </div>
@@ -70,6 +71,7 @@ const LogIn = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </label>
         </div>

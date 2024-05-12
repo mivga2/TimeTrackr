@@ -1,5 +1,5 @@
+import { generateToken } from "./auth.js";
 import { pool } from "./server.js";
-import jwt from "jsonwebtoken";
 
 // user queries
 export const getAllUsers = async (request, response) => {
@@ -8,8 +8,8 @@ export const getAllUsers = async (request, response) => {
       '(SELECT * FROM public."Friend_requests" AS fr WHERE (fr.receive_user_id = $1 AND id = fr.send_user_id) OR (fr.send_user_id = $1 AND id = fr.receive_user_id))' +
       ' AND NOT EXISTS (SELECT * FROM public."Friends" AS f WHERE (f.user2_id = $1 AND f.user1_id = id) OR (f.user1_id = $1 AND f.user2_id = id))' +
       " AND id != $1";
-    const values = ["3ab413ce-21ad-4868-9f11-c7b24e041b47"];
-  
+    const values = [request.userId];
+
     const res = await pool.query(sql, values, (error, results) => {
       if (error) {
         throw error;
@@ -63,7 +63,7 @@ export const getAllUsers = async (request, response) => {
         return response.status(400).send("Invalid username or password")
       }
       // eslint-disable-next-line no-undef
-      const token = jwt.sign({userId: results.id}, process.env.Secret)
+      const token = generateToken({id:results.rows[0].id})
       results.rows.push({token: token})
       response.status(200).json(results.rows);
     });
