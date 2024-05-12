@@ -2,20 +2,16 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { fetchAll, postNew } from "../../common/api";
 import { useNavigate } from "react-router-dom";
-import { Event } from "../../interfaces/Event";
-import { CalendarI } from "../../interfaces/CalendarI";
+import { calendarSelect, eventSelect } from "../../components/form/SelectInput";
+import Loading from "../../common/Loading";
 
 const NewTask = () => {
   const navigate = useNavigate();
   const cancelRoute = "/tasks";
   const [calendarLookup, setCalendarLookup] = useState([]);
   const [eventLookup, setEventLookup] = useState([]);
-
-  useEffect(() => {
-    fetchAll("/api/v1/calendars").then((result) => {
-      setCalendarLookup(result?.data);
-    });
-  }, []);
+  const [errorList, setErrorList] = useState<Array<JSX.Element>>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [name, setName] = useState("New Task");
   const [description, setDescription] = useState("");
@@ -25,34 +21,6 @@ const NewTask = () => {
   const [event, setEvent] = useState("");
   const [color, setColor] = useState("#FFFFFF");
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (calendar) {
-      fetchAll(`/api/v1/events/${calendar}`).then((result) => {
-        setEventLookup(result?.data);
-      });
-    } else {
-      setEventLookup([]);
-    }
-  }, [calendar]);
-
-  const eventSelect = (eventsList: Array<Event>) => {
-    const eventOptions = eventsList.map((eventOpt, i: number) => (
-      <option key={i} value={eventOpt.id}>
-        {eventOpt.name}
-      </option>
-    ));
-    return eventOptions;
-  };
-
-  const calendarSelect = (calendarsList: Array<CalendarI>) => {
-    const calendarOptions = calendarsList.map((calendarOpt, i: number) => (
-      <option key={i} value={calendarOpt.calendar_id}>
-        {calendarOpt.name}
-      </option>
-    ));
-    return calendarOptions;
-  };
 
   const taskData = {
     calendar_id: calendar,
@@ -65,6 +33,25 @@ const NewTask = () => {
     name: name,
     visible: visible,
   };
+
+  useEffect(() => {
+    fetchAll("/api/v1/calendars").then((result) => {
+      setCalendarLookup(result?.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (calendar) {
+      fetchAll(`/api/v1/events/${calendar}`)
+        .then((result) => {
+          setEventLookup(result?.data);
+        })
+        .then(() => setIsLoading(false));
+    } else {
+      setEventLookup([]);
+    }
+    setIsLoading(false);
+  }, [calendar]);
 
   const createTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +66,12 @@ const NewTask = () => {
     navigate(cancelRoute);
   };
 
+  if (isLoading)
+    return (
+      <>
+        <Loading />
+      </>
+    );
   return (
     <div>
       <form onSubmit={createTask}>

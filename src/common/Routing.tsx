@@ -28,7 +28,7 @@ const Routing = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="" element={<Base />}>  
+          <Route path="" element={<Base />}>
             <Route path="/overview" element={<Overview />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/calendar/new" element={<NewCalendar />} />

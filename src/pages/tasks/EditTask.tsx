@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchAll, fetchOne, updateOne } from "../../common/api";
-import { Event } from "../../interfaces/Event";
-import { CalendarI } from "../../interfaces/CalendarI";
+import {
+  calendarSelect,
+  completionRateSelect,
+  eventSelect,
+} from "../../components/form/SelectInput";
 
 const EditTask = () => {
   const navigate = useNavigate();
@@ -10,12 +13,17 @@ const EditTask = () => {
   const { id } = useParams();
   const [calendarLookup, setCalendarLookup] = useState([]);
   const [eventLookup, setEventLookup] = useState([]);
+  const [completionrateLookup, setCompletionrateLookup] = useState([]);
 
-  useEffect(() => {
-    fetchAll("/api/v1/calendars").then((result) => {
-      setCalendarLookup(result?.data);
-    });
-  }, []);
+  const [name, setName] = useState("New Task");
+  const [description, setDescription] = useState("");
+  const [dateDue, setDateDue] = useState(new Date().toISOString().slice(0, 16));
+  const [location, setLocation] = useState("");
+  const [calendar, setCalendar] = useState("");
+  const [event, setEvent] = useState("");
+  const [completionRate, setCompletionRate] = useState("");
+  const [color, setColor] = useState("");
+  const [visible, setVisible] = useState(false);
   const [task, setTask] = useState({
     name: null,
     description: null,
@@ -23,14 +31,36 @@ const EditTask = () => {
     location: null,
     calendar_id: null,
     event_id: null,
+    completion_rate_id: null,
     color: null,
     visible: null,
   });
 
+  const taskData = {
+    calendar_id: calendar,
+    color: color,
+    date_due: dateDue,
+    description: description,
+    event_id: event,
+    id: id,
+    completion_rate_id: completionRate,
+    name: name,
+    visible: visible,
+  };
+
+  useEffect(() => {
+    fetchAll("/api/v1/calendars").then((result) => {
+      setCalendarLookup(result?.data);
+    });
+
+    fetchAll("/api/v1/completion-rates").then((result) => {
+      setCompletionrateLookup(result?.data);
+    });
+  }, []);
+
   useEffect(() => {
     fetchOne(`/api/v1/task/${id}`).then((result) => {
       setTask(result?.data[0]);
-      console.log(result?.data);
     });
   }, [id]);
 
@@ -41,18 +71,10 @@ const EditTask = () => {
     setLocation(task.location || "");
     setCalendar(task.calendar_id || "");
     setEvent(task.event_id || "");
-    setColor(task.color || "");
+    setCompletionRate(task.completion_rate_id || "");
+    setColor(task.color || "#FFFFFF");
     setVisible(task.visible || false);
   }, [task]);
-
-  const [name, setName] = useState("New Task");
-  const [description, setDescription] = useState("");
-  const [dateDue, setDateDue] = useState(new Date().toISOString().slice(0, 16));
-  const [location, setLocation] = useState("");
-  const [calendar, setCalendar] = useState("");
-  const [event, setEvent] = useState("");
-  const [color, setColor] = useState("");
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (calendar) {
@@ -64,51 +86,8 @@ const EditTask = () => {
     }
   }, [calendar]);
 
-  const eventSelect = (eventsList: Array<Event>) => {
-    const eventOptions = eventsList.map((eventOpt, i: number) =>
-      eventOpt.id === event ? (
-        <option key={i} value={eventOpt.id} selected>
-          {eventOpt.name}
-        </option>
-      ) : (
-        <option key={i} value={eventOpt.id}>
-          {eventOpt.name}
-        </option>
-      )
-    );
-    return eventOptions;
-  };
-
-  const calendarSelect = (calendarsList: Array<CalendarI>) => {
-    const calendarOptions = calendarsList.map((calendarOpt, i: number) =>
-      calendarOpt.calendar_id === calendar ? (
-        <option key={i} value={calendarOpt.calendar_id} selected>
-          {calendarOpt.name}
-        </option>
-      ) : (
-        <option key={i} value={calendarOpt.calendar_id}>
-          {calendarOpt.name}
-        </option>
-      )
-    );
-    return calendarOptions;
-  };
-
-  const taskData = {
-    calendar_id: calendar,
-    color: color,
-    date_due: dateDue,
-    description: description,
-    event_id: event,
-    id: id,
-    completion_rate_id: "471cae22-4db1-4986-ac88-a077df96aab0",
-    name: name,
-    visible: visible,
-  };
-
   const updateTask = (e: React.FormEvent) => {
     e.preventDefault();
-    //taskData.event_id = "5012bda6-340b-4d9e-8ffa-880f1d78fca2";
 
     updateOne(`/api/v1/task/${id}`, taskData);
     navigate(cancelRoute);
@@ -186,6 +165,18 @@ const EditTask = () => {
             <select value={event} onChange={(e) => setEvent(e.target.value)}>
               <option></option>
               {eventSelect(eventLookup)}
+            </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Completion rate:
+            <select
+              value={completionRate}
+              onChange={(e) => setCompletionRate(e.target.value)}
+            >
+              <option></option>
+              {completionRateSelect(completionrateLookup)}
             </select>
           </label>
         </div>

@@ -41,7 +41,7 @@ export const getAllFriends = async (request, response) => {
   export const deleteFriendByIds = async (request, response) => {
     const sql =
       'DELETE FROM public."Friends" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)';
-    const values = [request.params.send_id, request.params.receive_id];
+    const values = [request.params.send_id, request.userId];
   
     await pool.query(sql, values, (error, results) => {
       if (error) {
@@ -55,7 +55,7 @@ export const getAllFriends = async (request, response) => {
     let allResults = [];
     const sql =
       'UPDATE public."Friend_requests" SET accepted = true WHERE send_user_id = $1 AND receive_user_id = $2';
-    const values = [request.params.send_id, request.params.receive_id];
+    const values = [request.params.send_id, request.userId];
   
     await pool.query(sql, values, (error, results) => {
       if (error) {
@@ -83,7 +83,7 @@ export const getAllFriends = async (request, response) => {
     const sql =
       'INSERT INTO public."Friend_requests" (send_user_id, receive_user_id, accepted, date_created) VALUES ($1, $2, $3, $4)';
     const values = [
-      request.body.sender_id,
+      request.userId,
       request.body.receiver_id,
       false,
       request.body.date,

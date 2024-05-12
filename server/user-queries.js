@@ -1,5 +1,7 @@
 import { generateToken } from "./auth.js";
 import { pool } from "./server.js";
+import bcrypt from "bcrypt";
+const saltRounds = 10
 
 // user queries
 export const getAllUsers = async (request, response) => {
@@ -19,19 +21,27 @@ export const getAllUsers = async (request, response) => {
   };
   
   export const postUser = async (request, response) => {
+    let hashSalt = '';
+    const hashedPassword = await bcrypt.genSalt(saltRounds).then(salt => {
+      hashSalt = salt
+      return bcrypt.hash(request.body.password, salt)
+    }).catch(() => {
+      response.status(500).send("Couldn't create user.")
+    })
+    console.log("hash ", hashedPassword, " raw ", request.body.password, " cmp ", await bcrypt.compare(request.body.password, hashedPassword))
     const sql =
-      'INSERT INTO public."Users" (id, username, salt, password, disabled) VALUES ($1, $2, $3, $4, $5) RETURNING id, username';
+      'INSERT INTO public."Users" (id, username, password, disabled, salt) VALUES ($1, $2, $3, $4, $5) RETURNING id, username';
     const values = [
       request.body.id,
       request.body.username,
-      request.body.salt,
-      request.body.password,
+      hashedPassword,
       request.body.disabled,
+      hashSalt
     ];
   
     await pool.query(sql, values, (error, results) => {
       if (error) {
-        throw error;
+        response.status(500).send("Couldn't create user.");
       }
       response.status(200).json(results.rows);
     });
@@ -50,18 +60,26 @@ export const getAllUsers = async (request, response) => {
   };
   
   export const getUserByNamePass = async (request, response) => {
-    const sql =
-      'SELECT id, username FROM public."Users" WHERE username = $1 AND password = $2';
-    const values = [request.params.username, request.params.password];
-    const res = await pool.query(sql, values, (error, results) => {
-      if (error) {
-        throw error;
-      }
+    let savedPassword = '';
 
-      if (!results.rows) {
-        console.log(results)
+    const sql =
+      'SELECT id, username, password, salt FROM public."Users" WHERE username = $1 AND disabled = false';
+    const values = [request.params.username];
+    await pool.query(sql, values, async (error, results) => {
+      if (error) {
+        return response.status(500).send(error);
+      }
+      
+      if (results.rows.length !== 1) {
         return response.status(400).send("Invalid username or password")
       }
+
+      savedPassword = results.rows[0].password
+      const hashPassword = await bcrypt.hash(request.params.password, results.rows[0].salt)
+      const passwordMatch = hashPassword.trim() === savedPassword.trim()
+
+      if (!passwordMatch) return response.status(400).send("Invalid username or password")
+
       // eslint-disable-next-line no-undef
       const token = generateToken({id:results.rows[0].id})
       results.rows.push({token: token})
@@ -76,7 +94,7 @@ export const getAllUsers = async (request, response) => {
     console.log(request.params.username)
     await pool.query(sql, values, (error, results) => {
       if (error) {
-        throw error;
+        return response.status(500);
       }
 
       response.status(200).json(results.rows);
@@ -85,8 +103,7 @@ export const getAllUsers = async (request, response) => {
 
   export const deleteUserById = async (request, response) => {
     const sql = 'UPDATE public."Users" SET disabled = true WHERE id = $1;';
-    const values = [request.params.id];
-    console.log(request.params.id)
+    const values = [request.userId];
   
     await pool.query(sql, values, (error, results) => {
       if (error) {

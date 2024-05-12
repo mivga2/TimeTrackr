@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const navigate = useNavigate();
-  const id = localStorage.getItem("userId");
 
   const logOut = () => {
     localStorage.clear();
@@ -11,7 +10,7 @@ const Account = () => {
   };
 
   const deleteAccount = () => {
-    deleteOne(`/api/v1/user/${id}`);
+    deleteOne(`/api/v1/user/`);
     logOut();
   };
 

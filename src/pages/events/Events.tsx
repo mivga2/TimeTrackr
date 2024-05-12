@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDateTime } from "../../common/timeData";
 import { Event } from "../../interfaces/Event";
+import Loading from "../../common/Loading";
 
 const Events = () => {
   const navigate = useNavigate();
@@ -23,10 +24,13 @@ const Events = () => {
       .then(() => setIsLoading(false));
   }, []);
 
+  // columns in api
   const columns = ["name", "date_from", "date_to", "calendar_name", "id"];
 
+  // action to be executed, redirects to .../edit/:id
   const idMapping = ["edit", "delete"];
 
+  // headers for each api item
   const headers = {
     name: "Name",
     date_from: "Date From",
@@ -40,12 +44,12 @@ const Events = () => {
     navigate("/events/new");
   };
 
-  if (isLoading) {
-    return <h1>LOADING...</h1>;
-  } else {
-    return (
-      <>
-        <button onClick={newEvent}>Create new event</button>
+  return (
+    <>
+      <button onClick={newEvent}>Create new event</button>
+      {isLoading ? (
+        <Loading />
+      ) : (
         <Table
           title="Events list"
           columnMapping={columns}
@@ -54,9 +58,9 @@ const Events = () => {
           data={events}
           itemType="events"
         />
-      </>
-    );
-  }
+      )}
+    </>
+  );
 };
 
 export default Events;

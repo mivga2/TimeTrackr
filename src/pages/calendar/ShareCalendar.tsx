@@ -10,29 +10,8 @@ const ShareCalendar = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const cancel = () => {
-    navigate(cancelRoute);
-  };
-
-  const share = (e: React.FormEvent) => {
-    e.preventDefault();
-    shareTo.forEach((item) => {
-      postNew(`/api/v1/calendar/share/${id}`, { id: item });
-      console.log(item);
-    });
-    navigate(cancelRoute);
-  };
-
-  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (e.target.checked) {
-      shareTo.add(value);
-    } else {
-      shareTo.delete(value);
-    }
-  };
-
   useEffect(() => {
+    // makes checkbox list of friends
     fetchAll("/api/v1/friends").then((result) => {
       const friendsList: Array<JSX.Element> = [];
       result?.data.map((friend: Friends, i: number) => {
@@ -59,6 +38,28 @@ const ShareCalendar = () => {
       );
     });
   }, []);
+
+  const share = (e: React.FormEvent) => {
+    e.preventDefault();
+    shareTo.forEach((item) => {
+      postNew(`/api/v1/calendar/share/${id}`, { id: item });
+    });
+    navigate(cancelRoute);
+  };
+
+  // checked friends will be granted permission
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      shareTo.add(value);
+    } else {
+      shareTo.delete(value);
+    }
+  };
+
+  const cancel = () => {
+    navigate(cancelRoute);
+  };
 
   return (
     <div>

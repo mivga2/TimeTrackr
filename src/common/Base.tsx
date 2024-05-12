@@ -25,9 +25,8 @@ const Base = () => {
     <>
       <Navigation />
       <div className="router-view">
-        <Outlet context={token} />
+        <Outlet />
       </div>
-      <Footer />
     </>
   );
 };

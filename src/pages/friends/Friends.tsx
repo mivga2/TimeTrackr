@@ -7,7 +7,8 @@ const Friends = () => {
   const [users, setUsers] = useState(null);
   const [requests, setRequests] = useState(null);
   const [sentRequests, setSentRequests] = useState(null);
-  
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     fetchAll("/api/v1/friends").then((result) => {
       setFriends(result?.data);
@@ -70,13 +71,13 @@ const Friends = () => {
       />
 
       <Table
-      title="Users list"
-      columnMapping={columns}
-      idMapping={idMappingUsers}
-      headers={headers}
-      data={users}
-      itemType="friends"
-    />
+        title="Users list"
+        columnMapping={columns}
+        idMapping={idMappingUsers}
+        headers={headers}
+        data={users}
+        itemType="friends"
+      />
     </>
   );
 };

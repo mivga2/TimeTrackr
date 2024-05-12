@@ -5,6 +5,7 @@ import { deleteOne } from "../../common/api";
 const DeleteTask = () => {
   const navigate = useNavigate();
   const cancelRoute = "/tasks";
+  // id from route
   const { id } = useParams();
 
   const deleteTask = (e: React.FormEvent) => {

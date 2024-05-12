@@ -46,19 +46,21 @@ const Table = ({
       return <tr key={i1}>{row}</tr>;
     });
   }
-
   return (
     <div>
       <h2>{title}</h2>
 
       <hr />
-
-      <table>
-        <thead>
-          <tr>{columnTitles}</tr>
-        </thead>
-        <tbody>{columnEntries}</tbody>
-      </table>
+      {data !== null && data.length !== 0 ? (
+        <table>
+          <thead>
+            <tr>{columnTitles}</tr>
+          </thead>
+          <tbody>{columnEntries}</tbody>
+        </table>
+      ) : (
+        <h3>You have no items.</h3>
+      )}
     </div>
   );
 };

@@ -11,15 +11,15 @@ const NewCalendar = () => {
   const [name, setName] = useState("New Calendar");
 
   const calendarData = {
-    id: '',
+    id: "",
     name: name,
   };
 
   useEffect(() => {
-      const errors: Array<JSX.Element> = [];
-      if (!name) errors.push(<p key="name">Name is required.</p>);
+    const errors: Array<JSX.Element> = [];
+    if (!name) errors.push(<p key="name">Name is required.</p>);
 
-      setErrorList(errors);
+    setErrorList(errors);
   }, [name]);
 
   const createCalendar = (e: React.FormEvent) => {
@@ -27,7 +27,9 @@ const NewCalendar = () => {
     if (errorList.length !== 0) return;
     calendarData.id = uuidv4();
 
+    // because of foreign keys, first calendar added, then permission
     postNew("/api/v1/calendar", calendarData);
+    postNew("/api/v1/calendar/permission", calendarData);
     navigate(cancelRoute);
   };
 

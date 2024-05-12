@@ -5,19 +5,19 @@ import {
   postNewUser,
   fetchAllUserdata,
 } from "../../common/api";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Array<JSX.Element>>([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVer, setPasswordVer] = useState("");
-  const token = useOutletContext();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) navigate("/overview");
+    if (localStorage.getItem("token")) navigate("/overview");
   });
 
   const userData = {
@@ -29,49 +29,58 @@ const Register = () => {
   };
 
   const verifyForm = () => {
-    if (password != passwordVer) return false;
+    const errorsList: Array<JSX.Element> = [];
+    if (password !== passwordVer)
+      errorsList.push(<p key="ident">Passwords aren't identical.</p>);
+    if (password.length < 8)
+      errorsList.push(<p key="passLen">Password isn't long enough.</p>);
+    if (username.length < 5)
+      errorsList.push(<p key="nameLen">Username isn't long enough.</p>);
+    setErrors(errorsList);
 
-    return true;
+    return errorsList.length === 0;
   };
 
   const createUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      if (!verifyForm()) return false;
 
-    if (!verifyForm) return false;
+      userData.id = uuidv4();
 
-    userData.id = uuidv4();
-    console.log("authorizing new account");
-
-    await fetchAllUserdata(`/api/v1/user/name/${userData.username}`).then(
-      (result) => {
-        if (result?.data[0]) {
-          setError("Username already exists!");
-          return;
-        } else {
-          setError("");
+      await fetchAllUserdata(`/api/v1/user/name/${userData.username}`).then(
+        (result) => {
+          if (result?.data[0]) {
+            setError("Username already exists!");
+            return;
+          } else {
+            setError("");
+          }
         }
-      }
-    );
+      );
 
-    await postNewUser("/api/v1/user", userData);
+      // creates a new user
+      await postNewUser("/api/v1/user", userData);
 
-    await getUserAuthenticate(
-      `/api/v1/user/${userData.username}/${userData.password}`
-    ).then((result) => {
-      console.log(result?.data);
-      localStorage.setItem("userId", result?.data[0].id);
-      localStorage.setItem("username", result?.data[0].username);
-      localStorage.setItem("token", result?.data[1].token);
-    });
+      // logs in, this creates token
+      await getUserAuthenticate(
+        `/api/v1/user/${userData.username}/`,
+        userData.password
+      ).then((result) => {
+        localStorage.setItem("username", result?.data[0].username);
+        localStorage.setItem("token", result?.data[1].token);
+      });
 
-    console.log(localStorage);
-    // cleanUp();
-    navigate("/overview");
+      navigate("/overview");
+    } catch (error) {
+      console.log("Wrong username or password.");
+    }
   };
 
   return (
     <>
       <p>{error}</p>
+      {errors}
       <form onSubmit={createUser}>
         <div>
           <label>
@@ -82,6 +91,7 @@ const Register = () => {
               onChange={(e) => setUsername(e.target.value)}
               autoFocus
               required
+              minLength={5}
             />
           </label>
         </div>
@@ -93,6 +103,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={8}
             />
           </label>
         </div>
@@ -104,6 +115,7 @@ const Register = () => {
               value={passwordVer}
               onChange={(e) => setPasswordVer(e.target.value)}
               required
+              minLength={8}
             />
           </label>
         </div>
@@ -111,6 +123,7 @@ const Register = () => {
           <input type="submit" />
         </div>
       </form>
+      <a href="/login">Already have an account? Log in</a>
     </>
   );
 };

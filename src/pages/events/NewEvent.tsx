@@ -2,19 +2,13 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { fetchAll, postNew } from "../../common/api";
 import { useNavigate } from "react-router-dom";
-import { CalendarI } from "../../interfaces/CalendarI";
+import { calendarSelect } from "../../components/form/SelectInput";
 
 const NewEvent = () => {
   const navigate = useNavigate();
   const cancelRoute = "/events";
   const [calendarLookup, setCalendarLookup] = useState([]);
   const [errorList, setErrorList] = useState<Array<JSX.Element>>([]);
-
-  useEffect(() => {
-    fetchAll("/api/v1/calendars").then((result) => {
-      setCalendarLookup(result?.data);
-    });
-  }, []);
 
   const [name, setName] = useState("New Event");
   const [description, setDescription] = useState("");
@@ -25,15 +19,6 @@ const NewEvent = () => {
   const [location, setLocation] = useState("");
   const [calendar, setCalendar] = useState("");
   const [color, setColor] = useState("#FFFFFF");
-
-  const calendarSelect = (calendarsList: Array<CalendarI>) => {
-    const calendarOptions = calendarsList.map((calendarOpt, i: number) => (
-      <option key={i} value={calendarOpt.calendar_id}>
-        {calendarOpt.name}
-      </option>
-    ));
-    return calendarOptions;
-  };
 
   const eventData = {
     calendar_id: calendar,
@@ -47,17 +32,23 @@ const NewEvent = () => {
   };
 
   useEffect(() => {
-      const errors: Array<JSX.Element> = [];
-      if (!name) errors.push(<p key="name">Name is required.</p>);
-      if (!dateFrom) errors.push(<p key="dfrom">Date from is required.</p>);
-      if (!dateTo) errors.push(<p key="dto">Date to is required.</p>);
-      if (!calendar) errors.push(<p key="calendar">Calendar is required.</p>);
-      if (!color) errors.push(<p key="color">Color is required.</p>);
+    fetchAll("/api/v1/calendars").then((result) => {
+      setCalendarLookup(result?.data);
+    });
+  }, []);
 
-      if (dateFrom > dateTo)
-        errors.push(<p key="datecmp">Date from must be earlier than date to.</p>);
+  useEffect(() => {
+    const errors: Array<JSX.Element> = [];
+    if (!name) errors.push(<p key="name">Name is required.</p>);
+    if (!dateFrom) errors.push(<p key="dfrom">Date from is required.</p>);
+    if (!dateTo) errors.push(<p key="dto">Date to is required.</p>);
+    if (!calendar) errors.push(<p key="calendar">Calendar is required.</p>);
+    if (!color) errors.push(<p key="color">Color is required.</p>);
 
-      setErrorList(errors);
+    if (dateFrom > dateTo)
+      errors.push(<p key="datecmp">Date from must be earlier than date to.</p>);
+
+    setErrorList(errors);
   }, [calendar, color, dateFrom, dateTo, name]);
 
   const createEvent = (e: React.FormEvent) => {

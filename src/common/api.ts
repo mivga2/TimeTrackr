@@ -1,7 +1,7 @@
 import axios from "axios";
-// import { useState } from 'react';
-const apiUrlBase = "https://timetrackrserver.onrender.com";
-// const apiUrlBase = "http://localhost:3000";
+
+// const apiUrlBase = "https://timetrackrserver.onrender.com";
+const apiUrlBase = "http://localhost:3000";
 
 export const fetchAll = async (apiUrl: string) => {
   const apiEndpoint = `${apiUrlBase}${apiUrl}`;
@@ -55,11 +55,12 @@ export const fetchOne = async (apiUrl: string) => {
   return response;
 };
 
-export const getUserAuthenticate = async (apiUrl: string) => {
-  const apiEndpoint = `${apiUrlBase}${apiUrl}`;
-
+export const getUserAuthenticate = async (apiUrl: string, password: string) => {
+  const apiEndpoint = `${apiUrlBase}${apiUrl}${password}`;
+  console.log(apiEndpoint);
   const response = await axios.get(apiEndpoint).catch((error) => {
-    console.error("Couldn't load data.", error);
+    console.error("Couldn't load data.", error.response);
+    throw error;
   });
 
   return response;

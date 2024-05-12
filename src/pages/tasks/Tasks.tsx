@@ -4,21 +4,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Task } from "../../interfaces/Task";
 import { formatDateTime } from "../../common/timeData";
+import Loading from "../../common/Loading";
 
 const Tasks = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAll("/api/v1/tasks").then((result) => {      
-      result?.data.map((task: Task) => {
-        task.date_due = formatDateTime(task.date_due);
-      });
-
-      setTasks(result?.data);
-    });
-  }, [tasks]);
-
+  // columns in api
   const columns = [
     "name",
     "completion_rate_name",
@@ -28,8 +21,10 @@ const Tasks = () => {
     "id",
   ];
 
-  const idMapping = ["edit", "delete"]
+  // options to execute with id, will redirect to .../edit/:id
+  const idMapping = ["edit", "delete"];
 
+  // table headers for api items
   const headers = {
     name: "Name",
     completion_rate_name: "Completion rate",
@@ -39,6 +34,18 @@ const Tasks = () => {
     id: "Edit or delete task",
   };
 
+  useEffect(() => {
+    fetchAll("/api/v1/tasks")
+      .then((result) => {
+        result?.data.map((task: Task) => {
+          task.date_due = formatDateTime(task.date_due);
+        });
+
+        setTasks(result?.data);
+      })
+      .then(() => setIsLoading(false));
+  }, [tasks]);
+
   const newTask = () => {
     navigate("/tasks/new");
   };
@@ -46,14 +53,18 @@ const Tasks = () => {
   return (
     <>
       <button onClick={newTask}>Create new task</button>
-      <Table
-        title="Tasks list"
-        columnMapping={columns}
-        idMapping={idMapping}
-        headers={headers}
-        data={tasks}
-        itemType="tasks"
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Table
+          title="Tasks list"
+          columnMapping={columns}
+          idMapping={idMapping}
+          headers={headers}
+          data={tasks}
+          itemType="tasks"
+        />
+      )}
     </>
   );
 };

@@ -1,50 +1,33 @@
+import { weekdays } from "../../common/timeData";
 import { MonthDataType } from "../../interfaces/MonthData";
 
 type CalendarProps = {
   data: Array<MonthDataType>;
   monthLength: number;
+  monthStartDay: number;
 };
 
-const MonthView = ({ data, monthLength }: CalendarProps) => {
+const MonthView = ({ data, monthLength, monthStartDay }: CalendarProps) => {
+  // modulo, that doesn't go negative
   function mod(n: number, m: number) {
     return ((n % m) + m) % m;
   }
-
-  const actualDate = new Date();
-  const currentMoment = {
-    day: actualDate.getDate(),
-    month: actualDate.getMonth(), // goes from 0, so shift
-    year: actualDate.getFullYear(),
-    hour: actualDate.getHours(),
-    minute: actualDate.getMinutes(),
-    weekDay: actualDate.getDay(), // goes from 1=Monday, ...
-  };
-
-  const weekDays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-
-  const monthStartDay = 1; //mon, tue, wen,...
-  // const calendarSlots = monthLength + mod(monthStartDay - 1, 7);
 
   const monthDays = [];
   let monthWeek = [];
   for (let i = 0; i < mod(monthStartDay - 1, 7); i++) {
     monthWeek.push(<td>-</td>);
   }
+
+  // creates month calendar with events from data
+  // goes day by day and if event in the duration, then adds the color and name into the slot
   for (let i = 0; i < monthLength; i++) {
     let weekDay: Array<JSX.Element> = [];
 
     data.map((event) => {
       if (Number(event.day_from) <= i + 1 && i + 1 <= Number(event.day_to)) {
         weekDay.push(
-          <p>
+          <p key={i + 200}>
             <svg height={20} width={20}>
               <defs></defs>
               <rect
@@ -61,43 +44,16 @@ const MonthView = ({ data, monthLength }: CalendarProps) => {
       }
     });
     monthWeek.push(
-      <td>
-        <p>{i + 1}</p>
+      <td key={i}>
+        <p key={i+90}>{i + 1}</p>
         {weekDay}
       </td>
     );
     weekDay = [];
 
     if (monthWeek.length === 7 || i === monthLength - 1) {
-      monthDays.push(<tr>{monthWeek}</tr>);
+      monthDays.push(<tr key={i + 30}>{monthWeek}</tr>);
       monthWeek = [];
-    }
-  }
-
-  const problematicMonth = () => {
-    const previousMonthDays = 30;
-    const currentMonthDays = 31;
-    if (currentMoment.day < 7) {
-      return previousMonthDays;
-    } else {
-      return currentMonthDays;
-    }
-  };
-
-  const weekStartDate = currentMoment.day - currentMoment.weekDay + 1;
-  const currentWeekDays = [];
-
-  for (let i = weekStartDate; i < weekStartDate + 7; i++) {
-    if (i === currentMoment.day) {
-      currentWeekDays.push(
-        <td key={i}>
-          <b>{mod(i - 1, problematicMonth()) + 1} day</b>
-        </td>
-      );
-    } else {
-      currentWeekDays.push(
-        <td key={i}>{mod(i - 1, problematicMonth()) + 1} day</td>
-      );
     }
   }
 
@@ -106,7 +62,7 @@ const MonthView = ({ data, monthLength }: CalendarProps) => {
       <table>
         <thead>
           <tr>
-            {weekDays.map((day: string, i: number) => (
+            {weekdays.map((day: string, i: number) => (
               <td key={i}> {day} </td>
             ))}
           </tr>

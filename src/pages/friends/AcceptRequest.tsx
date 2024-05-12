@@ -10,14 +10,14 @@ const AcceptRequest = () => {
   const acceptRequest = (e: React.FormEvent) => {
     e.preventDefault();
 
-    updateOne(`/api/v1/friend-request/sender/${id}/receiver/${localStorage.getItem("userId")}`, {});
+    updateOne(`/api/v1/friend-request/sender/${id}`, {});
     navigate(cancelRoute);
   };
 
   const cancel = () => {
     navigate(cancelRoute);
   };
-
+  
   return (
     <div>
       <form onSubmit={cancel}>
@@ -25,7 +25,11 @@ const AcceptRequest = () => {
           <b>Do you really wish to accept the friend request?</b>
         </p>
         <input type="submit" value="Cancel" />
-        <input type="button" value="Accept friend request" onClick={acceptRequest} />
+        <input
+          type="button"
+          value="Accept friend request"
+          onClick={acceptRequest}
+        />
       </form>
     </div>
   );

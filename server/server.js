@@ -13,6 +13,7 @@ import * as eq from "./event-queries.js";
 import * as uq from "./user-queries.js";
 import * as fq from "./friend-queries.js";
 import * as cq from "./calendar-queries.js";
+import * as eeq from "./enum-queries.js";
 import { verifyToken } from "./auth.js";
 
 app.use(cors());
@@ -46,6 +47,7 @@ app.get("/api/v1/sent-requests", verifyToken, fq.getAllSentFriendRequests);
 app.get("/api/v1/calendars", verifyToken, cq.getAllOwnedCalendars);
 app.get("/api/v1/shared/calendars", verifyToken, cq.getAllSharedCalendars);
 app.get("/api/v1/events/:calendar_id", verifyToken, cq.getAllEventsByCalId);
+app.get("/api/v1/completion-rates", verifyToken, eeq.getCompletionRates);
 
 // get item by id
 app.get("/api/v1/user/:id", verifyToken, uq.getUserById); //not used?
@@ -61,6 +63,7 @@ app.post("/api/v1/user", uq.postUser);
 app.post("/api/v1/friend-request", verifyToken, fq.postFriendRequest);
 app.post("/api/v1/calendar/share/:calendar_id", verifyToken, cq.postCalendarPermission);
 app.post("/api/v1/calendar", verifyToken, cq.postCalendar);
+app.post("/api/v1/calendar/permission", verifyToken, cq.postOwnerCalendarPermission);
 
 // update item by id
 app.put("/api/v1/event/:id", verifyToken, eq.putEventById);
@@ -68,17 +71,17 @@ app.put("/api/v1/task/:id", verifyToken, tq.putTaskById);
 
 // update friend request by receiver
 app.put(
-  "/api/v1/friend-request/sender/:send_id/receiver/:receive_id",
+  "/api/v1/friend-request/sender/:send_id",
   verifyToken,
   fq.putRequestByIds
 );
 
 // delete item by id
-app.delete("/api/v1/user/:id", verifyToken, uq.deleteUserById);
+app.delete("/api/v1/user/", verifyToken, uq.deleteUserById);
 app.delete("/api/v1/event/:id", verifyToken, eq.deleteEventById);
 app.delete("/api/v1/task/:id", verifyToken, tq.deleteTaskById);
 app.delete(
-  "/api/v1/friend-request/sender/:send_id/receiver/:receive_id",
+  "/api/v1/friend-request/sender/:send_id",
   verifyToken,
   fq.deleteFriendByIds
 );

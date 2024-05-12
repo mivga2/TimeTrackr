@@ -1,43 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchAll, fetchOne, updateOne } from "../../common/api";
-import { CalendarI } from "../../interfaces/CalendarI";
+import { calendarSelect } from "../../components/form/SelectInput";
 
 const EditEvent = () => {
   const navigate = useNavigate();
   const cancelRoute = "/events";
   const { id } = useParams();
   const [calendarLookup, setCalendarLookup] = useState([]);
-
-  const [event, setEvent] = useState({
-    name: null,
-    description: null,
-    date_from: "",
-    date_to: "",
-    location: null,
-    calendar_id: null,
-    color: null,
-  });
-
-  useEffect(() => {
-    fetchOne(`/api/v1/event/${id}`).then((result) => {
-      setEvent(result?.data[0]);
-    });
-
-    fetchAll("/api/v1/calendars").then((result) => {
-      setCalendarLookup(result?.data);
-    });
-  }, [id]);
-
-  useEffect(() => {
-    setName(event.name || "");
-    setDescription(event.description ? event.description : "");
-    setDateFrom(event.date_from ? event.date_from.slice(0, 16) : "");
-    setDateTo(event.date_to ? event.date_to.slice(0, 16) : "");
-    setLocation(event.location || "");
-    setCalendar(event.calendar_id || "");
-    setColor(event.color || "");
-  }, [event]);
 
   const [name, setName] = useState("New Event");
   const [description, setDescription] = useState("");
@@ -48,6 +18,15 @@ const EditEvent = () => {
   const [location, setLocation] = useState("");
   const [calendar, setCalendar] = useState("");
   const [color, setColor] = useState("#FFFFFF");
+  const [event, setEvent] = useState({
+    name: null,
+    description: null,
+    date_from: "",
+    date_to: "",
+    location: null,
+    calendar_id: null,
+    color: null,
+  });
 
   const eventData = {
     calendar_id: calendar,
@@ -60,20 +39,25 @@ const EditEvent = () => {
     name: name,
   };
 
-  const calendarSelect = (calendarsList: Array<CalendarI>) => {
-    const calendarOptions = calendarsList.map((calendarOpt, i: number) =>
-      calendarOpt.calendar_id === calendar ? (
-        <option key={i} value={calendarOpt.calendar_id} selected>
-          {calendarOpt.name}
-        </option>
-      ) : (
-        <option key={i} value={calendarOpt.calendar_id}>
-          {calendarOpt.name}
-        </option>
-      )
-    );
-    return calendarOptions;
-  };
+  useEffect(() => {
+    setName(event.name || "");
+    setDescription(event.description ? event.description : "");
+    setDateFrom(event.date_from ? event.date_from.slice(0, 16) : "");
+    setDateTo(event.date_to ? event.date_to.slice(0, 16) : "");
+    setLocation(event.location || "");
+    setCalendar(event.calendar_id || "");
+    setColor(event.color || "#FFFFFF");
+  }, [event]);
+
+  useEffect(() => {
+    fetchOne(`/api/v1/event/${id}`).then((result) => {
+      setEvent(result?.data[0]);
+    });
+
+    fetchAll("/api/v1/calendars").then((result) => {
+      setCalendarLookup(result?.data);
+    });
+  }, [id]);
 
   const updateEvent = (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,7 +144,11 @@ const EditEvent = () => {
         </div>
 
         <input type="submit" value="Update" />
-        <input type="button" value="Cancel" onClick={cancel} />
+        <input
+          type="button"
+          value="Cancel"
+          onClick={cancel}
+        />
       </form>
     </div>
   );

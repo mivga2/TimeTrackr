@@ -1,6 +1,7 @@
 // import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { postNew } from "../../common/api";
+import { cancel } from "../../common/formFunctions";
 
 const AddFriend = () => {
   const navigate = useNavigate();
@@ -8,7 +9,6 @@ const AddFriend = () => {
   const { id } = useParams();
 
   const requestData = {
-    sender_id: localStorage.getItem("userId"),
     receiver_id: id,
     date: new Date(),
   };
@@ -19,11 +19,9 @@ const AddFriend = () => {
     postNew(`/api/v1/friend-request/`, requestData);
     navigate(cancelRoute);
   };
-
   const cancel = () => {
     navigate(cancelRoute);
   };
-
   return (
     <div>
       <form onSubmit={cancel}>

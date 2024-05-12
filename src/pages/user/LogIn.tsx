@@ -14,6 +14,8 @@ const LogIn = () => {
     password: password,
   };
 
+  // not registered user should be redirected to login
+  // if logged in, then redirected to overview
   useEffect(() => {
     if (localStorage.getItem("token")) navigate("/overview");
   }, [navigate]);
@@ -21,12 +23,13 @@ const LogIn = () => {
   const authenticateUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // logs in user and saves created token to storage
     try {
       await getUserAuthenticate(
-        `/api/v1/user/${userData.username}/${userData.password}`
+        `/api/v1/user/${userData.username}/`,
+        userData.password
       ).then((result) => {
         console.log(result?.data);
-        localStorage.setItem("userId", result?.data[0].id);
         localStorage.setItem("username", result?.data[0].username);
         localStorage.setItem("token", result?.data[1].token);
 
