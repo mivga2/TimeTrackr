@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const NewCalendar = () => {
   const navigate = useNavigate();
   const cancelRoute = "/calendar";
-  const [errorList, setErrorList] = useState([]);
+  const [errorList, setErrorList] = useState<Array<JSX.Element>>([]);
 
   const [name, setName] = useState("New Calendar");
 
@@ -16,7 +16,7 @@ const NewCalendar = () => {
   };
 
   useEffect(() => {
-      const errors = [];
+      const errors: Array<JSX.Element> = [];
       if (!name) errors.push(<p key="name">Name is required.</p>);
 
       setErrorList(errors);

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 const LogIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useState({ id: "", username: "" });
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -41,7 +40,6 @@ const LogIn = () => {
   };
 
   const cleanUp = () => {
-    setAuth({ id: "", username: "" });
     setUsername("");
     setPassword("");
   };

@@ -28,7 +28,7 @@ const AddFriend = () => {
     <div>
       <form onSubmit={cancel}>
         <p>
-          <b>Do you really wish to delete the task?</b>
+          <b>Do you really wish to add the friend?</b>
         </p>
         <input type="submit" value="Cancel" />
         <input type="button" value="Send request" onClick={addFriend} />

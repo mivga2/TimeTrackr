@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { fetchAll, postNew } from "../../common/api";
 import { useNavigate } from "react-router-dom";
+import { Event } from "../../interfaces/Event";
+import { CalendarI } from "../../interfaces/CalendarI";
 
 const NewTask = () => {
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const NewTask = () => {
     }
   }, [calendar]);
 
-  const eventSelect = (eventsList) => {
+  const eventSelect = (eventsList: Array<Event>) => {
     const eventOptions = eventsList.map((eventOpt, i: number) => (
       <option key={i} value={eventOpt.id}>
         {eventOpt.name}
@@ -43,7 +45,7 @@ const NewTask = () => {
     return eventOptions;
   };
 
-  const calendarSelect = (calendarsList) => {
+  const calendarSelect = (calendarsList: Array<CalendarI>) => {
     const calendarOptions = calendarsList.map((calendarOpt, i: number) => (
       <option key={i} value={calendarOpt.calendar_id}>
         {calendarOpt.name}

@@ -53,9 +53,7 @@ const Register = () => {
       }
     );
 
-    await postNewUser("/api/v1/user", userData).then((result) => {
-      console.log("New user created");
-    });
+    await postNewUser("/api/v1/user", userData);
 
     await getUserAuthenticate(
       `/api/v1/user/${userData.username}/${userData.password}`

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchAll, fetchOne, updateOne } from "../../common/api";
+import { Event } from "../../interfaces/Event";
+import { CalendarI } from "../../interfaces/CalendarI";
 
 const EditTask = () => {
   const navigate = useNavigate();
@@ -62,7 +64,7 @@ const EditTask = () => {
     }
   }, [calendar]);
 
-  const eventSelect = (eventsList) => {
+  const eventSelect = (eventsList: Array<Event>) => {
     const eventOptions = eventsList.map((eventOpt, i: number) =>
       eventOpt.id === event ? (
         <option key={i} value={eventOpt.id} selected>
@@ -77,7 +79,7 @@ const EditTask = () => {
     return eventOptions;
   };
 
-  const calendarSelect = (calendarsList) => {
+  const calendarSelect = (calendarsList: Array<CalendarI>) => {
     const calendarOptions = calendarsList.map((calendarOpt, i: number) =>
       calendarOpt.calendar_id === calendar ? (
         <option key={i} value={calendarOpt.calendar_id} selected>

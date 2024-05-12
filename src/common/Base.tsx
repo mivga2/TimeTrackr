@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import NoPermission from "./NoPermission";
 
 const Base = () => {
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

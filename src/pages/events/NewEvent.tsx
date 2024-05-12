@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { fetchAll, postNew } from "../../common/api";
 import { useNavigate } from "react-router-dom";
+import { CalendarI } from "../../interfaces/CalendarI";
 
 const NewEvent = () => {
   const navigate = useNavigate();
   const cancelRoute = "/events";
   const [calendarLookup, setCalendarLookup] = useState([]);
+  const [errorList, setErrorList] = useState<Array<JSX.Element>>([]);
 
   useEffect(() => {
     fetchAll("/api/v1/calendars").then((result) => {
@@ -24,7 +26,7 @@ const NewEvent = () => {
   const [calendar, setCalendar] = useState("");
   const [color, setColor] = useState("#FFFFFF");
 
-  const calendarSelect = (calendarsList) => {
+  const calendarSelect = (calendarsList: Array<CalendarI>) => {
     const calendarOptions = calendarsList.map((calendarOpt, i: number) => (
       <option key={i} value={calendarOpt.calendar_id}>
         {calendarOpt.name}
@@ -44,8 +46,23 @@ const NewEvent = () => {
     name: name,
   };
 
+  useEffect(() => {
+      const errors: Array<JSX.Element> = [];
+      if (!name) errors.push(<p key="name">Name is required.</p>);
+      if (!dateFrom) errors.push(<p key="dfrom">Date from is required.</p>);
+      if (!dateTo) errors.push(<p key="dto">Date to is required.</p>);
+      if (!calendar) errors.push(<p key="calendar">Calendar is required.</p>);
+      if (!color) errors.push(<p key="color">Color is required.</p>);
+
+      if (dateFrom > dateTo)
+        errors.push(<p key="datecmp">Date from must be earlier than date to.</p>);
+
+      setErrorList(errors);
+  }, [calendar, color, dateFrom, dateTo, name]);
+
   const createEvent = (e: React.FormEvent) => {
     e.preventDefault();
+    if (errorList.length !== 0) return;
     eventData.id = uuidv4();
 
     postNew("/api/v1/event", eventData);
@@ -58,6 +75,7 @@ const NewEvent = () => {
 
   return (
     <div>
+      {errorList}
       <form onSubmit={createEvent}>
         <div>
           <input
@@ -65,6 +83,7 @@ const NewEvent = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
+            required
           />
         </div>
         <div>
@@ -83,6 +102,7 @@ const NewEvent = () => {
               type="datetime-local"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
+              required
             />
           </label>
         </div>
@@ -93,6 +113,7 @@ const NewEvent = () => {
               type="datetime-local"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
+              required
             />
           </label>
         </div>
@@ -112,6 +133,7 @@ const NewEvent = () => {
             <select
               value={calendar}
               onChange={(e) => setCalendar(e.target.value)}
+              required
             >
               <option></option>
               {calendarSelect(calendarLookup)}
@@ -125,6 +147,7 @@ const NewEvent = () => {
               type="color"
               value={color}
               onChange={(e) => setColor(e.target.value)}
+              required
             />
           </label>
         </div>

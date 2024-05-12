@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchAll, fetchOne, updateOne } from "../../common/api";
+import { CalendarI } from "../../interfaces/CalendarI";
 
 const EditEvent = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const EditEvent = () => {
     name: name,
   };
 
-  const calendarSelect = (calendarsList) => {
+  const calendarSelect = (calendarsList: Array<CalendarI>) => {
     const calendarOptions = calendarsList.map((calendarOpt, i: number) =>
       calendarOpt.calendar_id === calendar ? (
         <option key={i} value={calendarOpt.calendar_id} selected>

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { deleteOne, fetchAll, postNew } from "../../common/api";
+import { fetchAll, postNew } from "../../common/api";
 import { useNavigate, useParams } from "react-router-dom";
-import Table from "../../components/Table";
+import { Friends } from "../../interfaces/Friends";
 
 const ShareCalendar = () => {
-  const [friends, setFriends] = useState([]);
-  const [shareTo, setShareTo] = useState(new Set());
-  const [friendsCheckboxs, setFriendsCheckboxs] = useState([]);
+  const shareTo = new Set();
+  const [friendsCheckboxs, setFriendsCheckboxs] = useState<JSX.Element>(<></>);
   const cancelRoute = "/calendar";
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,16 +14,16 @@ const ShareCalendar = () => {
     navigate(cancelRoute);
   };
 
-  const share = (e) => {
-    e.preventDefault()
+  const share = (e: React.FormEvent) => {
+    e.preventDefault();
     shareTo.forEach((item) => {
-        postNew(`/api/v1/calendar/share/${id}`, {id: item});
-        console.log(item)
-    })
-    navigate(cancelRoute)
+      postNew(`/api/v1/calendar/share/${id}`, { id: item });
+      console.log(item);
+    });
+    navigate(cancelRoute);
   };
 
-  const handleCheckbox = (e) => {
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (e.target.checked) {
       shareTo.add(value);
@@ -35,9 +34,8 @@ const ShareCalendar = () => {
 
   useEffect(() => {
     fetchAll("/api/v1/friends").then((result) => {
-      setFriends(result?.data);
-      const friendsList = [];
-      result?.data.map((friend, i) => {
+      const friendsList: Array<JSX.Element> = [];
+      result?.data.map((friend: Friends, i: number) => {
         friendsList.push(
           <tr key={i}>
             <td>

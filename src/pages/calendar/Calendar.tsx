@@ -1,5 +1,5 @@
 import MonthView from "./MonthView";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchAll } from "../../common/api";
 import { Event } from "../../interfaces/Event";
 import {
@@ -8,20 +8,22 @@ import {
   months,
 } from "../../common/timeData";
 import { useNavigate } from "react-router-dom";
+import { CalendarI } from "../../interfaces/CalendarI";
+import { MonthDataType } from "../../interfaces/MonthData";
 
 const Calendar = () => {
   const [events, setEvents] = useState([]);
-  const [calendars, setCalendars] = useState(null);
-  const [sharedCalendars, setSharedCalendars] = useState(null);
-  const [calendarsList, setCalendarsList] = useState([]);
-  const [sharedCalendarsList, setSharedCalendarsList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [monthData, setMonthData] = useState([]);
-  const [calId, setCalId] = useState("");
-  const [currentCal, setCurrentCal] = useState("");
-  const [year, setYear] = useState();
-  const [month, setMonth] = useState();
-  const [dayCount, setDayCount] = useState();
+  const [calendars, setCalendars] = useState<Array<CalendarI>>([]);
+  const [sharedCalendars, setSharedCalendars] = useState<Array<CalendarI>>([]);
+  const [calendarsList, setCalendarsList] = useState<JSX.Element>();
+  const [sharedCalendarsList, setSharedCalendarsList] = useState<JSX.Element>();
+  // const [isLoading, setIsLoading] = useState(true);
+  const [monthData, setMonthData] = useState<Array<MonthDataType>>([]);
+  const [calId, setCalId] = useState<string>("");
+  const [currentCal, setCurrentCal] = useState<string>("");
+  const [year, setYear] = useState<number>(0);
+  const [month, setMonth] = useState<number>(0);
+  const [dayCount, setDayCount] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,9 +45,9 @@ const Calendar = () => {
       if (result?.data.length !== 0) {
         setCalId(result?.data[0].calendar_id);
         setCurrentCal(result?.data[0].name);
-        const calendarList = [];
+        const calendarList: Array<JSX.Element> = [];
         if (result?.data)
-          result?.data.map((calendar, i) => {
+          result?.data.map((calendar: CalendarI, i: number) => {
             calendarList.push(
               <li key={i}>
                 <a
@@ -61,19 +63,19 @@ const Calendar = () => {
               </li>
             );
           });
-        const calendars = <ul>{calendarList}</ul>;
+        const calendars: JSX.Element = <ul>{calendarList}</ul>;
         setCalendarsList(calendars);
       } else {
-        setCalendarsList([]);
+        setCalendarsList(<></>);
       }
     });
 
     fetchAll(`/api/v1/shared/calendars`).then((result) => {
       setSharedCalendars(result?.data);
       if (result?.data.length !== 0) {
-        const calendarList = [];
+        const calendarList: Array<JSX.Element> = [];
         if (result?.data)
-          result?.data.map((calendar) => {
+          result?.data.map((calendar: CalendarI) => {
             calendarList.push(
               <li>
                 <a
@@ -92,7 +94,7 @@ const Calendar = () => {
         const calendars = <ul>{calendarList}</ul>;
         setSharedCalendarsList(calendars);
       } else {
-        setSharedCalendarsList([]);
+        setSharedCalendarsList(<></>);
       }
     });
   }, []);
@@ -114,27 +116,33 @@ const Calendar = () => {
   useEffect(() => {
     if (events) {
       console.log(events);
-      const filteredData = [];
+      const filteredData: Array<MonthDataType> = [];
       const tmpEvents = events.filter((event: Event) => {
         const start_date = event.date_from.split(",");
         const end_date = event.date_to.split(",");
 
-        if (start_date[2] > year || end_date[2] < year) return false;
-        if (start_date[2] <= year && start_date[1] > month) return false;
-        if (end_date[2] >= year && end_date[1] < month) return false;
+        if (Number(start_date[2]) > year || Number(end_date[2]) < year)
+          return false;
+        if (Number(start_date[2]) <= year && Number(start_date[1]) > month)
+          return false;
+        if (Number(end_date[2]) >= year && Number(end_date[1]) < month)
+          return false;
         if (
-          start_date[2] == year &&
-          end_date[2] == year &&
-          start_date[1] == month &&
-          end_date[1] == month
+          Number(start_date[2]) == year &&
+          Number(end_date[2]) == year &&
+          Number(start_date[1]) == month &&
+          Number(end_date[1]) == month
         )
           return true;
         if (
-          start_date[2] < year ||
-          (start_date[2] == year && start_date[1] < month)
+          Number(start_date[2]) < year ||
+          (Number(start_date[2]) == year && Number(start_date[1]) < month)
         )
           event.date_from = "1," + month + "," + year;
-        if (end_date[2] > year || (end_date[2] == year && end_date[1] > month))
+        if (
+          Number(end_date[2]) > year ||
+          (Number(end_date[2]) == year && Number(end_date[1]) > month)
+        )
           event.date_to = dayCount + "," + month + "," + year;
         return true;
       });
@@ -153,9 +161,9 @@ const Calendar = () => {
     }
   }, [events, year, month, dayCount]);
 
-  const changeDate = (direction) => {
-    let chMonth = month;
-    let chYear = year;
+  const changeDate = (direction: number) => {
+    let chMonth = month || new Date().getMonth() + 1;
+    let chYear = year || new Date().getFullYear();
     if (direction === -1) {
       if (month === 1) {
         chYear--;
@@ -176,7 +184,7 @@ const Calendar = () => {
     setDayCount(daysInMonth(chMonth, chYear));
   };
 
-  if (calendarsList.length !== 0 || sharedCalendarsList.length !== 0) {
+  if (calendarsList !== <></> || sharedCalendarsList !== <></>) {
     return (
       <>
         <button

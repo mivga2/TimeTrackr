@@ -1,10 +1,8 @@
 import Table from "../../components/Table";
 import { fetchAll } from "../../common/api";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Friends = () => {
-  const navigate = useNavigate();
   const [friends, setFriends] = useState(null);
   const [users, setUsers] = useState(null);
   const [requests, setRequests] = useState(null);
@@ -25,26 +23,22 @@ const Friends = () => {
     });
   }, [sentRequests]);
 
-  const columns = ["username", "id"];
+  const columns: Array<string> = ["username", "id"];
 
-  const sentColumns = ["username"];
+  const sentColumns: Array<string> = ["username"];
 
-  const idMappingFriends = ["unfriend"];
+  const idMappingFriends: Array<string> = ["unfriend"];
 
-  const idMappingUsers = ["add"];
+  const idMappingUsers: Array<string> = ["add"];
 
-  const idMappingRequests = ["accept"];
+  const idMappingRequests: Array<string> = ["accept"];
 
-  const idMappingSentRequests = [];
+  const idMappingSentRequests: Array<string> = [];
 
   const headers = {
     username: "Username",
     id: "Action",
   };
-
-  // const newEvent = () => {
-  //   navigate("/events/new");
-  // };
 
   return (
     <>

@@ -1,5 +1,7 @@
+import { MonthDataType } from "../../interfaces/MonthData";
+
 type CalendarProps = {
-  data: any;
+  data: Array<MonthDataType>;
   monthLength: number;
 };
 
@@ -7,27 +9,6 @@ const MonthView = ({ data, monthLength }: CalendarProps) => {
   function mod(n: number, m: number) {
     return ((n % m) + m) % m;
   }
-
-  const daysData = (allEvents) => {
-    const events = new Map();
-    console.log(allEvents);
-    allEvents.forEach((element) => {
-      if (element.day_from > element.day_to)
-        console.log(element.day_from, " ", element.day_to, " ", element.name);
-      for (
-        let i = element.date_from.split(",")[0];
-        i <= element.date_to.split(",")[0];
-        i++
-      ) {
-        if (events.has(i)) {
-          events.get(i).push({ id: element.id, color: element.color });
-        } else {
-          events.set(i, [{ id: element.id, color: element.color }]);
-        }
-      }
-    });
-    return events;
-  };
 
   const actualDate = new Date();
   const currentMoment = {
@@ -49,9 +30,8 @@ const MonthView = ({ data, monthLength }: CalendarProps) => {
     "Sunday",
   ];
 
-  // const monthLength = 30;
   const monthStartDay = 1; //mon, tue, wen,...
-  const calendarSlots = monthLength + mod(monthStartDay - 1, 7);
+  // const calendarSlots = monthLength + mod(monthStartDay - 1, 7);
 
   const monthDays = [];
   let monthWeek = [];
@@ -59,10 +39,10 @@ const MonthView = ({ data, monthLength }: CalendarProps) => {
     monthWeek.push(<td>-</td>);
   }
   for (let i = 0; i < monthLength; i++) {
-    let weekDay = [];
+    let weekDay: Array<JSX.Element> = [];
 
     data.map((event) => {
-      if (event.day_from <= i + 1 && i + 1 <= event.day_to) {
+      if (Number(event.day_from) <= i + 1 && i + 1 <= Number(event.day_to)) {
         weekDay.push(
           <p>
             <svg height={20} width={20}>
