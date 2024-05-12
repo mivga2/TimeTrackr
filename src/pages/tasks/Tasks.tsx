@@ -3,7 +3,7 @@ import { fetchAll } from "../../common/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Task } from "../../interfaces/Task";
-import { formatDateTime } from "../../common/timeFormat";
+import { formatDateTime } from "../../common/timeData";
 
 const Tasks = () => {
   const navigate = useNavigate();
